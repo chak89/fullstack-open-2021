@@ -1,0 +1,18 @@
+title 0.6: New note
+
+
+note over browser: 
+1. User type text in the text field and click save button to submit.
+2. spa.js executes, update the DOM with new data.
+3. Create POST request to the address new_note_spa, contains 
+the new note as JSON-data containing both the content of the note (content) 
+and the timestamp (date):
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+The server responds with status code 201 created
+end note
+
+server-->browser: Status code 201 created

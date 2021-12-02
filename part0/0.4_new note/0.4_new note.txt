@@ -1,0 +1,47 @@
+title 0.4: new note
+
+
+note over browser: 
+1. Typing text in the input
+2. When the save button is clicked, the browser will send the user input to the server.
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over server:
+1. Code on server responsible for the POST request executes:
+Data is sent as the body of the POST-request.
+The server access the data by req.body field of the request object req.
+Server creates new note object and adds it to an array called notes.
+2. The server responds with HTTP status code 302(URL redirect)
+3. The server ask the browser to do a new HTTP GET request to the
+address defined the the header's location.
+location: /exampleapp/notes
+end note
+
+server-->browser: HTTP REDIRECT /exampleapp/notes
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+
+note over browser:
+1. Browser reload the Notes page
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code(main.js)
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: data.json
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
