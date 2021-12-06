@@ -7,6 +7,26 @@ const Button = ({btnClick, text}) => {
   )
 }
 
+const MostVoted = ({anecdotes, votes}) => {
+
+  const newVotes =[];
+  Object.entries(votes).forEach(
+    ([key, value]) => newVotes[key] = Number(value)
+  )
+  const max = Math.max(...newVotes)
+  const index = newVotes.indexOf(max)
+  
+  return (
+  <div>
+    <h1>Anecdote with most votes</h1>
+    {anecdotes[index]}
+    <div>
+        has {max} votes 
+    </div>
+  </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -36,6 +56,7 @@ const App = () => {
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
       <div>
         has {votes[selected]} votes 
@@ -44,6 +65,7 @@ const App = () => {
         <Button btnClick={voteAnecdote} text='vote' />
         <Button btnClick={getNextAnecdote} text='next anecdote'/>
       </div>
+      <MostVoted anecdotes={anecdotes} votes={votes}/>
     </div>
   )
 }
