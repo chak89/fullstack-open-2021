@@ -10,11 +10,28 @@ const Button = ({onClick, text}) => {
 }
 
 const Statistics = ({good, neutral, bad}) => {
+
+
+  let all = good + neutral + bad
+  let average = (good*1 + neutral*0 + bad*-1) / all
+  let positive = (good/all)*100
+
+  if(isNaN(average)) {
+    average = 0;
+  }
+
+  if(isNaN(positive)) {
+    positive = 0;
+  }
+
   return (
     <>
     <tr>good {good}</tr>
     <tr>neutral {neutral}</tr>
     <tr>bad {bad}</tr>
+    <tr>all {all}</tr>
+    <tr>average {average}</tr>
+    <tr>positive {positive} %</tr>
     </>
   )
 }
