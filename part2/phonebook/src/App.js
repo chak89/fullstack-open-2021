@@ -1,20 +1,41 @@
 import React, { useState } from 'react'
 
+
+const DisplayNames = ({ person }) => {
+  return (
+    <div>{person.name}</div>
+  )
+}
+
 const App = () => {
 
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas' }
-  ]) 
+  ])
 
   const [newName, setNewName] = useState('')
 
   const addName = (event) => {
     event.preventDefault()
-    const personObject = {
-      name : newName
+
+    let nameExist = false
+
+    persons.forEach(person => {
+      if (person.name === newName) {
+        nameExist = true
+        return;
+      }
+    })
+
+    if (nameExist) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      const personObject = {
+        name: newName
+      }
+      setPersons(persons.concat(personObject))
     }
 
-    setPersons(persons.concat(personObject))
     setNewName('')
   }
 
@@ -23,8 +44,7 @@ const App = () => {
     setNewName(event.target.value)
   }
 
-  const displayNames = persons.map(person => <div>{person.name}</div>);
-  console.log('displayNames', displayNames)
+  const displayNames = persons.map((person, index) => <DisplayNames key={index} person={person} />);
 
   return (
     <div>
@@ -32,8 +52,8 @@ const App = () => {
       <form onSubmit={addName}>
         <div>
           name: <input
-                  value={newName}
-                  onChange={handleNameChange}      
+            value={newName}
+            onChange={handleNameChange}
           />
         </div>
         <div>
@@ -46,7 +66,7 @@ const App = () => {
       </div>
       <div>debug: {newName}</div>
     </div>
-    
+
   )
 }
 
