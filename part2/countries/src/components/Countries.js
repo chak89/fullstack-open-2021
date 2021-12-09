@@ -1,47 +1,58 @@
+import React, { useEffect, useState } from "react";
+import CountryView from "./CountryView"
 
-const Countries = ({showResult}) => {
 
-    if(showResult.length > 10) {
+
+const Countries = ({ showResult }) => {
+
+    const [countryIndex, setCountryIndex] = useState('')
+    const [showCountry, setShowCountry] = useState(false)
+    const [renderedShowCountry, setRenderedShowCountry] = useState(null)
+    const [buttonShowText, setButtontext] = useState('show')
+
+    const handleButton = (index) => {
+        setCountryIndex(index)
+        setShowCountry(!showCountry)
+
+        if(buttonShowText==='show') {
+            setButtontext('unshow')
+        } else {
+            setButtontext('show')
+        }
+    }
+
+    useEffect(() => {
+        setRenderedShowCountry(showCountry ? <CountryView showResult={showResult[countryIndex]} /> : null) 
+    }, [countryIndex, showCountry, showResult]);
+
+    if (showResult.length > 10) {
         return (
             <div>
                 Too many matches, specify another filter
             </div>
         )
-    } 
-    else if(showResult.length === 1) {
-
-        const languages = Object.values(showResult[0].languages).map((v,index) => <li key={index}>{v}</li>)
-        const flagUrl = showResult[0].flags.png
-
+    }
+    else if (showResult.length === 1) {
         return (
-            <>
-            <div>
-                <h1>{showResult[0].name.common}</h1>
-                <div>capital {showResult[0].capital}</div>
-                <div>population {showResult[0].population}</div>
-            </div>
-            <div>
-                <h2>languages</h2>
-                <ul>
-                {languages}
-                </ul>
-            </div>
-            <div>
-                <img src={flagUrl} alt="flag logo"/>
-            </div>
-            </>
+            <CountryView showResult={showResult[0]} />
         )
-    } 
+    }
     else {
-        const displayCountries = showResult.map((country, index) => <div key={index}>{country.name.common}</div>)
+        const displayCountries = showResult.map((country, index) => (
+            <div key={index}>
+                {country.name.common}
+                <button onClick={() => handleButton(index)}>{buttonShowText}</button>
+                {index === countryIndex ? renderedShowCountry : null}
+            </div>))
 
         return (
-           <div>
-               {displayCountries}
-           </div>
+            <div>
+                {displayCountries}
+            </div>
         )
     }
 
 }
+
 
 export default Countries
