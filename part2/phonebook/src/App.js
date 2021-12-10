@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Notifications from './components/Notifications'
 
 
 const App = () => {
@@ -12,6 +13,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showPersons, setShowPersons] = useState(persons)
   const [filterSearch, setFilterSearch] = useState('')
+  const [notifications, setNotifications] = useState('')
+
 
   //[] means run one time after rendering.
   useEffect(() => {
@@ -45,6 +48,10 @@ const App = () => {
           .update(changedPerson.id, changedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id === existingPerson.id ? returnedPerson : person))
+            setNotifications(`Changed ${returnedPerson.name}\'s number to ${returnedPerson.number}`)
+            setTimeout(() => {
+              setNotifications(null)
+            }, 5000)
           })
       }
     } else {
@@ -55,30 +62,14 @@ const App = () => {
 
       personService
         .create(personObject)
-        .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
-    }
-
-
-    /*     persons.forEach(person => {
-          if (person.name === newName) {
-            nameExist = true
-            return;
-          }
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNotifications(`Added ${returnedPerson.name}`)
+          setTimeout(() => {
+            setNotifications(null)
+          }, 5000)
         })
-    
-        if (nameExist) {
-    
-    
-        } else {
-          const personObject = {
-            name: newName,
-            number: newNumber
-          }
-    
-          personService
-            .create(personObject)
-            .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
-        } */
+    }
 
     setNewName('')
     setNewNumber('')
@@ -115,6 +106,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notifications notifications={notifications} />
+
       <Filter
         filterSearch={filterSearch}
         handleFilterSearch={handleFilterSearch}
