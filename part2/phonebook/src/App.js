@@ -13,7 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showPersons, setShowPersons] = useState(persons)
   const [filterSearch, setFilterSearch] = useState('')
-  const [notifications, setNotifications] = useState('')
+  const [notifications, setNotifications] = useState(null)
 
 
   //[] means run one time after rendering.
@@ -48,7 +48,14 @@ const App = () => {
           .update(changedPerson.id, changedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id === existingPerson.id ? returnedPerson : person))
-            setNotifications(`Changed ${returnedPerson.name}\'s number to ${returnedPerson.number}`)
+            setNotifications(`Changed ${returnedPerson.name}'s number to ${returnedPerson.number}`)
+            setTimeout(() => {
+              setNotifications(null)
+            }, 5000)
+          })
+          .catch( error => {
+            setNotifications(`Information of ${changedPerson.name} has already been removed from server`)
+            setPersons(persons.filter(p => p.id !== changedPerson.id))
             setTimeout(() => {
               setNotifications(null)
             }, 5000)

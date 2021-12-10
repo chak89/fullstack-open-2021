@@ -9,3 +9,14 @@
     border: 5px solid green;
 
 }
+
+.notificationsError {
+    color: red;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    font-size: 30px;
+    background-color: rgb(255, 204, 204);
+    border: 5px solid red;
+
+}
