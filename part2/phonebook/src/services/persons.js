@@ -17,10 +17,16 @@ const deleteId = (personId) => {
     return request.then((response) => console.log(response));
 }
 
+const update = (id, newObject) => {
+    const request = axios.put(`${baseUrl}/${id}`, newObject)
+    return request.then(response => response.data)
+  }
+
 const persons = {
     getAll,
     create,
-    deleteId
+    deleteId,
+    update
 }
 
 export default persons
