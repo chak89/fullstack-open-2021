@@ -1,8 +1,8 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 
 const App = () => {
@@ -15,8 +15,9 @@ const App = () => {
 
   //[] means run one time after rendering.
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-    .then(response => setPersons(response.data))
+    personService
+    .getAll()
+    .then(responseData => setPersons(responseData))
   }, [])
 
     //Callback for hooks filterSearch, everytime filterSearch gets update run this.
@@ -49,7 +50,10 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(personObject))
+
+      personService
+      .create(personObject)
+      .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
     }
 
     setNewName('')
