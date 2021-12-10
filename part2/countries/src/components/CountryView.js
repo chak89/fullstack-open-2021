@@ -1,3 +1,5 @@
+import Weather from "./Weather"
+
 
 const CountryView = ({showResult}) => {
     console.log("CountryView", showResult)
@@ -20,6 +22,12 @@ const CountryView = ({showResult}) => {
             </div>
             <div>
                 <img src={flagUrl} alt="flag logo" />
+            </div>
+            <div>
+                <h2>Weather in {showResult.capital}</h2>
+            </div>
+            <div>
+                <Weather showResult={showResult}/>
             </div>
         </>
     )

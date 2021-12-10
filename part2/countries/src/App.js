@@ -4,7 +4,7 @@ import Countries from './components/Countries';
 import Search from './components/Search';
 
 function App() {
-
+  
   const [countries, setCountries] = useState([])
   const [search, setSearch] = useState('')
   const [showResult, setShowResult] = useState([])
