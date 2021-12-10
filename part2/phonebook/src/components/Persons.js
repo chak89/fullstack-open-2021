@@ -1,8 +1,7 @@
 /* import React from 'react' */
 
-const Persons = ({ persons }) => {
-
-    const displayNames = persons.map((person, index) => <DisplayNames key={index} person={person} />);
+const Persons = ({ persons, deletePerson }) => {
+    const displayNames = persons.map((person, index) => <DisplayNames key={person.id} person={person} deletePerson={deletePerson} />);
 
     return (
         <div>
@@ -11,9 +10,11 @@ const Persons = ({ persons }) => {
     )
 }
 
-const DisplayNames = ({ person }) => {
+const DisplayNames = ({ person, deletePerson}) => {
     return (
-        <div>{person.name} {person.number}</div>
+        <div>{person.name} {person.number}&nbsp;
+        <button onClick={() => deletePerson(person)}> delete</button>
+        </div>
     )
 }
 

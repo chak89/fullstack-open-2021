@@ -16,19 +16,19 @@ const App = () => {
   //[] means run one time after rendering.
   useEffect(() => {
     personService
-    .getAll()
-    .then(responseData => setPersons(responseData))
+      .getAll()
+      .then(responseData => setPersons(responseData))
   }, [])
 
-    //Callback for hooks filterSearch, everytime filterSearch gets update run this.
-    useEffect(() => {
-      setShowPersons(persons.filter(person => person.name.toLowerCase().includes(filterSearch.toLowerCase())))
-    },[persons,filterSearch])
-  
-  
-    useEffect(() => {
-      setShowPersons(persons)
-    },[persons])
+  //Callback for hooks filterSearch, everytime filterSearch gets update run this.
+  useEffect(() => {
+    setShowPersons(persons.filter(person => person.name.toLowerCase().includes(filterSearch.toLowerCase())))
+  }, [persons, filterSearch])
+
+
+  useEffect(() => {
+    setShowPersons(persons)
+  }, [persons])
 
 
   const addPerson = (event) => {
@@ -52,48 +52,63 @@ const App = () => {
       }
 
       personService
-      .create(personObject)
-      .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
+        .create(personObject)
+        .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
     }
 
     setNewName('')
     setNewNumber('')
   }
 
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
+  const deletePerson = (person) => {
+    console.log('deletePerson')
 
-  const handleNumberChange = (event) => {
-    setNewNumber(event.target.value)
-  }
+    if (window.confirm(`Delete ${person.name} with id ${person.id}?`)) {
+      personService
+      .deleteId(person.id)
+      .then(() => {
+        setPersons(persons.filter(p => p.id !== person.id))
+        console.log('Delete successful')
+      })
+      .catch(err => console.log('error:', err))
+    } 
+}
 
-  const handleFilterSearch = (event) => {
-    setFilterSearch(event.target.value)
-  }
+
+const handleNameChange = (event) => {
+  setNewName(event.target.value)
+}
+
+const handleNumberChange = (event) => {
+  setNewNumber(event.target.value)
+}
+
+const handleFilterSearch = (event) => {
+  setFilterSearch(event.target.value)
+}
 
 
-  return (
-    <div>
-      <h2>Phonebook</h2>
-      <Filter
+return (
+  <div>
+    <h2>Phonebook</h2>
+    <Filter
       filterSearch={filterSearch}
       handleFilterSearch={handleFilterSearch}
-      />
+    />
 
-      <h2>Add a new</h2>
-      <PersonForm 
-        newName= {newName}
-        newNumber={newNumber}
-        handleNameChange={handleNameChange}
-        handleNumberChange={handleNumberChange}
-        addPerson={addPerson}
-      />
+    <h2>Add a new</h2>
+    <PersonForm
+      newName={newName}
+      newNumber={newNumber}
+      handleNameChange={handleNameChange}
+      handleNumberChange={handleNumberChange}
+      addPerson={addPerson}
+    />
 
-      <h2>Numbers</h2>
-      <Persons persons={showPersons}/>
-    </div>
-  )
+    <h2>Numbers</h2>
+    <Persons persons={showPersons} deletePerson={deletePerson} />
+  </div>
+)
 }
 
 export default App
