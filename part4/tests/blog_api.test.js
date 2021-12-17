@@ -14,9 +14,7 @@ beforeEach(async () => {
 	for (let blog of helper.initialBlogs) {
 		let blogObject = new Blog(blog)
 		await blogObject.save()
-		console.log('saved')
 	}
-	console.log('done')
 })
 
 
@@ -33,6 +31,25 @@ test('correct amount of blogs are returned as json', async () => {
 test('the unique identifier property of the blog posts is named id', async () => {
 	const response = await api.get('/api/blogs')
 	expect(response.body[0].id).toBeDefined()
+})
+
+
+test('making an HTTP POST request to the /api/blogs url successfully creates a new blog post', async () => {
+	const newBlog = {
+		title: "Test blog",
+		author: "Test",
+		url: "https://testblog.com",
+		likes: 100,
+	}
+
+	let response = await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	response = await api.get('/api/blogs')
+	expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
 })
 
 
