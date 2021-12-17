@@ -70,6 +70,21 @@ test('if the likes property is missing from the request, it will default to the 
 	expect(response.body[helper.initialBlogs.length].likes).toBe(0)
 })
 
+
+test('if title and url properties missing, respond with 400 Bad Request', async () => {
+	const newBlog = {
+		author: "Missing title",
+		url: "https://testblog.com",
+		likes: 100,
+	}
+
+	await api
+	.post('/api/blogs')
+	.send(newBlog)
+	.expect(400)
+	.expect('Content-Type', /application\/json/)
+})
+
 //afterAll function of Jest to close the connection to the database after the tests are finished executing.
 afterAll(() => {
 	mongoose.connection.close()
