@@ -1,8 +1,12 @@
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const express = require('express')
-const app = express()
 
+//express-async-errors to eliminate the try-catch blocks completely in async functions
+//If an exception occurs in a async route, the execution is automatically passed to the error handling middleware.
+require('express-async-errors')
+
+const app = express()
 const cors = require('cors')
 
 const blogsRouter = require('./controllers/blogs')
