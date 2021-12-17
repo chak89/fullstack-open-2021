@@ -16,7 +16,6 @@ beforeEach(async () => {
 		await blogObject.save()
 		console.log('saved')
 	}
-
 	console.log('done')
 })
 
@@ -31,7 +30,10 @@ test('correct amount of blogs are returned as json', async () => {
 })
 
 
-
+test('the unique identifier property of the blog posts is named id', async () => {
+	const response = await api.get('/api/blogs')
+	expect(response.body[0].id).toBeDefined()
+})
 
 
 //afterAll function of Jest to close the connection to the database after the tests are finished executing.
