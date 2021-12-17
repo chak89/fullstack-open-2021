@@ -53,6 +53,23 @@ test('making an HTTP POST request to the /api/blogs url successfully creates a n
 })
 
 
+test('if the likes property is missing from the request, it will default to the value 0', async () => {
+	const newBlog = {
+		title: "Blog with 0 likes",
+		author: "0 likes",
+		url: "www.likes.com"
+	}
+
+	let response = await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	response = await api.get('/api/blogs')
+	expect(response.body[helper.initialBlogs.length].likes).toBe(0)
+})
+
 //afterAll function of Jest to close the connection to the database after the tests are finished executing.
 afterAll(() => {
 	mongoose.connection.close()
