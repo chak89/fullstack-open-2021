@@ -79,11 +79,71 @@ test('if title and url properties missing, respond with 400 Bad Request', async 
 	}
 
 	await api
-	.post('/api/blogs')
-	.send(newBlog)
-	.expect(400)
-	.expect('Content-Type', /application\/json/)
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(400)
+		.expect('Content-Type', /application\/json/)
 })
+
+
+test('deletion of a blog', async () => {
+	const newBlog = {
+		title: "Blog to be deleted",
+		author: "Delete me",
+		url: "https://deleteme.com",
+		likes: 666,
+	}
+
+	let response = await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	await api
+		.delete(`/api/blogs/${response.body.id}`)
+		.expect(200)
+	
+	await api
+		.get(`/api/blogs/${response.body.id}`)
+		.expect(400)
+		.expect('Content-Type', /application\/json/)
+})
+
+
+test('updating a blog is working', async () => {
+	const newBlog = {
+		title: "Blog to be updated",
+		author: "UpdateMe",
+		url: "https://Updateme.com",
+		likes: 88888,
+	}
+
+	let response = await api
+		.post('/api/blogs')
+		.send(newBlog)
+		.expect(201)
+		.expect('Content-Type', /application\/json/)
+
+	const updatedBlog = {
+		likes: 98
+	}
+
+	await api
+	.put(`/api/blogs/${response.body.id}`)
+	.send(updatedBlog)
+	.expect(200)
+
+	
+	response = await api
+		.get(`/api/blogs/${response.body.id}`)
+		.expect(200)
+		.expect('Content-Type', /application\/json/)
+
+	expect(response.body.likes).toBe(98)
+
+})
+
 
 //afterAll function of Jest to close the connection to the database after the tests are finished executing.
 afterAll(() => {
