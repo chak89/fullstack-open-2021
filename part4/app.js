@@ -11,6 +11,7 @@ const app = express()
 const cors = require('cors')
 
 const blogsRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
 const mongoose = require('mongoose')
 
 app.use(cors())
@@ -28,6 +29,7 @@ mongoose.connect(config.MONGO_URI)
 
 
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 
 // this has to be the last loaded middleware, so that next() inside other middelware will call this
