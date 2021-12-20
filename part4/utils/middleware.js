@@ -2,7 +2,7 @@ const logger = require('./logger')
 
 //Middleware errorhandling
 const errorHandler = (error, request, response, next) => {
-	logger.error('Middleware errorhandling:', error.message)
+	logger.error('Middleware errorhandling:', error)
 
 	if (error.name === 'CastError') {
 		return response.status(400).send({ error: 'malformatted id' })
