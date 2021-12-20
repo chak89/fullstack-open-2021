@@ -13,7 +13,9 @@ usersRouter.post('/', async (request, response) => {
 	const reqBody = request.body
 
 	if (reqBody.password.length < 3) {
-		return response.status(404).json({ error: "Password must be at least 3 characters long" })
+		//pass an error, just throw a normal exception since we use express-async-errors 
+		throw Error("passwordLengthError")
+		//return response.status(404).json({ error: "Password must be at least 3 characters long" })
 	}
 
 	const saltRounds = 10

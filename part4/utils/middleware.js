@@ -2,7 +2,7 @@ const logger = require('./logger')
 
 //Middleware errorhandling
 const errorHandler = (error, request, response, next) => {
-	logger.error('Middleware errorhandling:', error.name)
+	logger.error('Middleware errorhandling:', error.message)
 
 	if (error.name === 'CastError') {
 		return response.status(400).send({ error: 'malformatted id' })
@@ -10,6 +10,9 @@ const errorHandler = (error, request, response, next) => {
 	else if (error.name === 'ValidationError') {
 		return response.status(400).json({ error: error.message })
 	}
+	else if(error.message === 'passwordLengthError') {
+		return response.status(404).json({ error: "Password must be at least 3 characters long" })
+	} 
 
 
 	next(error)
