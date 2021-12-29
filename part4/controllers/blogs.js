@@ -18,7 +18,7 @@ blogsRouter.post('/', async (request, response) => {
 	console.log('request.token:', request.token)
 	const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
-	if(!request.token || !decodedToken.id) {
+	if (!request.token || !decodedToken.id) {
 		return response.status(401).json({ error: 'token missing or invalid' })
 	}
 
@@ -44,13 +44,40 @@ blogsRouter.post('/', async (request, response) => {
 
 //Delete a blog by id
 blogsRouter.delete('/:id', async (request, response) => {
-	const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
-	response.json(deletedBlog)
+
+	const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+	if (!request.token || !decodedToken.id) {
+		return response.status(401).json({ error: 'token missing or invalid' })
+	}
+
+	const blog = await Blog.findById(request.params.id)
+
+	if (blog === null) {
+		response.status(400).json(
+			{
+				error: 'ID doesnt exist'
+			}
+		)
+	}
+
+	if (decodedToken.id === blog.user.toString()) {
+		const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
+		response.json(deletedBlog)
+	} else {
+		response.status(400).json(
+			{
+				error: 'Unable to delete blog, creator and deleter ID doesnt match'
+			}
+		)
+	}
 })
 
 //Get a blog by id
 blogsRouter.get('/:id', async (request, response) => {
-	const blog = await Blog.findById(request.params.id)
+	const blog = await Blog
+		.findById(request.params.id)
+		.populate('user', { username: 1, name: 1 })
 
 	if (blog === null) {
 		response.status(400).json(
