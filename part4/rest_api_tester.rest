@@ -1,7 +1,11 @@
-POST http://localhost:3003/api/login
+POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ
+
 
 {
-		"username": "Elon",
-		"password": "SpaceX"
+	"title": "Bearer Token",
+	"author": "Authorized",
+	"url": "NONE",
+	"likes": 1111
 }
