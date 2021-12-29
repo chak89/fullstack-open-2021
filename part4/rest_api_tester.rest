@@ -2,7 +2,6 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ
 
-
 {
 	"title": "Bearer Token",
 	"author": "Authorized",

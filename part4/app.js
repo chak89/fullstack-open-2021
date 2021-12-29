@@ -1,7 +1,7 @@
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 const express = require('express')
-const errorHandler = require('./utils/middleware')
+const middleware = require('./utils/middleware')
 
 //express-async-errors to eliminate the try-catch blocks completely in async functions
 //If an exception occurs in a async route, the execution is automatically passed to the error handling middleware.
@@ -10,6 +10,7 @@ require('express-async-errors')
 const app = express()
 const cors = require('cors')
 
+app.use(middleware.tokenExtractor)
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
@@ -35,6 +36,6 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 
 // this has to be the last loaded middleware, so that next() inside other middelware will call this
-app.use(errorHandler.errorHandler)
+app.use(middleware.errorHandler)
 
 module.exports = app
