@@ -3,6 +3,7 @@ const { response } = require('express')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const middleware = require('../utils/middleware')
 
 //Get all blogs
 blogsRouter.get('/', async (request, response) => {
@@ -13,17 +14,8 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 //Post a blog
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 	const reqBody = request.body
-	console.log('request.token:', request.token)
-	const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-	if (!request.token || !decodedToken.id) {
-		return response.status(401).json({ error: 'token missing or invalid' })
-	}
-
-	const user = await User.findById(decodedToken.id)
-	console.log('user:', user)
 
 	const newBlog =
 	{
@@ -31,25 +23,19 @@ blogsRouter.post('/', async (request, response) => {
 		author: reqBody.author,
 		url: reqBody.url,
 		likes: reqBody?.likes || 0,
-		user: user.id
+		user: request.user.id
 	}
 
 	const blog = new Blog(newBlog)
 	const savedBlog = await blog.save()
-	user.blogs = user.blogs.concat(savedBlog.id)
-	console.log(user)
-	await user.save()
+	request.user.blogs = request.user.blogs.concat(savedBlog.id)
+	logger.info('blogsRouter.post -> request.user:',request.user)
+	await request.user.save()
 	response.status(201).json(savedBlog)
 })
 
 //Delete a blog by id
-blogsRouter.delete('/:id', async (request, response) => {
-
-	const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-	if (!request.token || !decodedToken.id) {
-		return response.status(401).json({ error: 'token missing or invalid' })
-	}
+blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
 
 	const blog = await Blog.findById(request.params.id)
 
@@ -61,9 +47,12 @@ blogsRouter.delete('/:id', async (request, response) => {
 		)
 	}
 
-	if (decodedToken.id === blog.user.toString()) {
+	if (request.user.id === blog.user.toString()) {
 		const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
+		request.user.blogs = request.user.blogs.filter(val => (val != request.params.id))
+		await request.user.save()
 		response.json(deletedBlog)
+
 	} else {
 		response.status(400).json(
 			{
@@ -75,6 +64,7 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 //Get a blog by id
 blogsRouter.get('/:id', async (request, response) => {
+	logger.info('request:', request)
 	const blog = await Blog
 		.findById(request.params.id)
 		.populate('user', { username: 1, name: 1 })
