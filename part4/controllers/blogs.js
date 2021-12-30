@@ -1,3 +1,4 @@
+const logger = require('../utils/logger')
 const blogsRouter = require('express').Router()
 const { response } = require('express')
 const Blog = require('../models/blog')
@@ -28,8 +29,10 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 
 	const blog = new Blog(newBlog)
 	const savedBlog = await blog.save()
+
 	request.user.blogs = request.user.blogs.concat(savedBlog.id)
 	logger.info('blogsRouter.post -> request.user:',request.user)
+
 	await request.user.save()
 	response.status(201).json(savedBlog)
 })
@@ -64,7 +67,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
 
 //Get a blog by id
 blogsRouter.get('/:id', async (request, response) => {
-	logger.info('request:', request)
+	logger.info('blogsRouter.get -> request.body', request.body)
 	const blog = await Blog
 		.findById(request.params.id)
 		.populate('user', { username: 1, name: 1 })
@@ -81,10 +84,30 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 //Update a blog by id
-blogsRouter.put('/:id', async (request, response) => {
+blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
+	logger.info('blogsRouter.put -> request.body', request.body)
 	const body = request.body
-	const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body, { new: true })
-	response.json(updatedBlog);
+
+	const blog = await Blog.findById(request.params.id)
+
+	if (blog === null) {
+		response.status(400).json(
+			{
+				error: 'ID doesnt exist'
+			}
+		)
+	}
+
+	if (request.user.id === blog.user.toString()) {
+		const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body, { new: true })
+		response.json(updatedBlog);
+	} else {
+		response.status(400).json(
+			{
+				error: 'Unable to edit blog, creator and editor ID doesnt match'
+			}
+		)
+	}
 })
 
 module.exports = blogsRouter
