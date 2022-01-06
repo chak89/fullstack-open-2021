@@ -8,4 +8,9 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+
+const commands = {
+	getAll
+}
+
+export default commands

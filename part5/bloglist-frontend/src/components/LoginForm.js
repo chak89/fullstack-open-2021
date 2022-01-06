@@ -1,29 +1,30 @@
 const LoginForm = (props) => {
-	const { user } = props
+	const { user, username, setUsername, password, setPassword, handleLogin } = props
 
 	if (user === null) {
 		return (
 			<div>
 				<h2>Log in to application</h2>
-				<form>
+				<form onSubmit={handleLogin}>
 					<div>
 						username
 						<input
 							type="text"
-							value={null}
+							value={username}
 							name="Username"
-							onChange={null}
+							onChange={(event => setUsername(event.target.value))}
 						/>
 					</div>
 					<div>
 						password
 						<input
 							type="password"
-							value={null}
+							value={password}
 							name="Password"
-							onChange={null}
+							onChange={(event => setPassword(event.target.value))}
 						/>
 					</div>
+					<button type="submit">login</button>
 				</form>
 			</div>
 		)
