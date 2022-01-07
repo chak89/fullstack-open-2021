@@ -35,7 +35,6 @@ const App = () => {
 		setPassword('')
 	}
 
-
 	return (
 		<div>
 			{user === null ?
@@ -48,12 +47,16 @@ const App = () => {
 					handleLogin={handleLogin}
 				/>)
 				:
-				(
-				(<h2>blogs</h2>)
-
-				(blogs.map(blog =>
-					<Blog key={blog.id} blog={blog} />
-				)))
+				<>
+					<h2>Blogs</h2>
+					<p>{user.name} logged in</p>
+					{blogs.filter((blog) =>
+						blog.user?.username === user.username)
+						.map((blog) =>
+							<Blog key={blog.id} blog={blog} />
+						)
+					}
+				</>
 			}
 		</div>
 	)
