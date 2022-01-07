@@ -17,6 +17,19 @@ const App = () => {
 		)
 	}, [])
 
+	//Check if user detailed of a logged-in user can already found on the local storage after refresh
+	useEffect(() => {
+		const loggedUserJSON = window.localStorage.getItem('loggedInBlogUser')
+
+		if(loggedUserJSON) {
+			const loggedInUser = JSON.parse(loggedUserJSON)
+			setUser(loggedInUser)
+		}
+
+	}, [])
+
+
+
 	//Run this when login buttion is clicked.
 	const handleLogin = async (event) => {
 		event.preventDefault()
@@ -30,9 +43,23 @@ const App = () => {
 		)
 		console.log('respondedUser:', respondedUser)
 
-		setUser(respondedUser)
+		//Set user state and clear fields
 		setUsername('')
 		setPassword('')
+
+		if (respondedUser !== null) {
+			setUser(respondedUser)
+			//Saving the token to the browser's local storage
+			window.localStorage.setItem(
+				'loggedInBlogUser', JSON.stringify(respondedUser)
+			)
+		}
+	}
+
+	const handleLogout = (e) =>{
+		e.preventDefault();
+		window.localStorage.clear();
+		setUser(null)
 	}
 
 	return (
@@ -49,7 +76,7 @@ const App = () => {
 				:
 				<>
 					<h2>Blogs</h2>
-					<p>{user.name} logged in</p>
+					<p>{user.name} logged in<button type="submit" onClick={handleLogout}>Logout</button></p> 
 					{blogs.filter((blog) =>
 						blog.user?.username === user.username)
 						.map((blog) =>
