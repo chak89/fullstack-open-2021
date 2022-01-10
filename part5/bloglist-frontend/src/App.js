@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
 	const [allBlogs, setAllBlogs] = useState([])
@@ -15,6 +16,8 @@ const App = () => {
 	const [notifications, setNotifications] = useState(null)
 	const [reRender, setRerender] = useState(false)
 
+	const createBlogFormRef = useRef()
+
 	//Fetch all blogs once at start
 	useEffect(() => {
 		blogService.getAll().then(blogs =>
@@ -24,11 +27,11 @@ const App = () => {
 
 
 	useEffect(() => {
-		if(user != null) {
-		const result =  allBlogs
-		.filter((blog) => blog.user.username === user.username)
-		.map((blog) =><Blog key={blog.id} blog={blog} />)
-		setUserBlogs(result)
+		if (user != null) {
+			const result = allBlogs
+				.filter((blog) => blog.user.username === user.username)
+				.map((blog) => <Blog key={blog.id} blog={blog} />)
+			setUserBlogs(result)
 		}
 	}, [allBlogs, user])
 
@@ -95,10 +98,12 @@ const App = () => {
 			"url": e.target.linkurl.value || ' '
 		}
 
+		
 		try {
 			const createdBlog = await blogService.create(newBlog)
 			console.log('createdBlog', createdBlog)
 			setRerender(!reRender)
+			createBlogFormRef.current.toggleVisibility()
 
 			setNotifications([`green`, `a new blog ${e.target.title.value} by ${e.target.author.value} added`])
 			setTimeout(() => {
@@ -118,21 +123,25 @@ const App = () => {
 				<>
 					<h2>Log in to application</h2>
 					<Notification notifications={notifications} />
-					<LoginForm
-						user={user}
-						username={username}
-						setUsername={setUsername}
-						password={password}
-						setPassword={setPassword}
-						handleLogin={handleLogin}
-					/>
+					<Togglable buttonLabel='login'>
+						<LoginForm
+							user={user}
+							username={username}
+							setUsername={setUsername}
+							password={password}
+							setPassword={setPassword}
+							handleLogin={handleLogin}
+						/>
+					</Togglable>
 				</>
 				:
 				<>
 					<h2>Blogs</h2>
 					<Notification notifications={notifications} />
 					<p>{user.name} logged in<button type="submit" onClick={handleLogout}>Logout</button></p>
-					<CreateBlogForm handleCreateBlog={handleCreateBlog} />
+					<Togglable buttonLabel='createNewBlog' ref={createBlogFormRef}>
+						<CreateBlogForm handleCreateBlog={handleCreateBlog} />
+					</Togglable>
 					<br />
 					{userBlogs}
 				</>
