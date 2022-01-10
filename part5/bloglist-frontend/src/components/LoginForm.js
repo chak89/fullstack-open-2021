@@ -4,7 +4,6 @@ const LoginForm = (props) => {
 	if (user === null) {
 		return (
 			<div>
-				<h2>Log in to application</h2>
 				<form onSubmit={handleLogin}>
 					<div>
 						username

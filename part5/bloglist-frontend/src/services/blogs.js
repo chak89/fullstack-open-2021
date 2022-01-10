@@ -10,6 +10,7 @@ const setToken = (newToken) => {
 }
 
 const getAll = () => {
+	console.log('blogs.js -> getAll:')
 	const request = axios.get(baseUrl)
 	return request.then(response => response.data)
 }
@@ -19,7 +20,7 @@ const create = async (newBLog) => {
 		headers: { Authorization: token }
 	};
 
-	console.log('newBLog', newBLog)
+	console.log('blogs.js -> newBLog', newBLog)
 	const response = await axios.post(baseUrl, newBLog, config)
 	return response.data
 }
