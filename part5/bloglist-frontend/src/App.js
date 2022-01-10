@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import './App.css'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
@@ -26,6 +27,7 @@ const App = () => {
 	}, [reRender])
 
 
+	//After user login, show only blogs created by such user
 	useEffect(() => {
 		if (user != null) {
 			const result = allBlogs
@@ -46,6 +48,7 @@ const App = () => {
 			blogService.setToken(loggedInUser.token)
 		}
 	}, [])
+
 
 	//Run this when login buttion is clicked.
 	const handleLogin = async (event) => {
@@ -87,25 +90,15 @@ const App = () => {
 		blogService.setToken(null)
 	}
 
+
 	//Handles create new blog
-	const handleCreateBlog = async (e) => {
-		e.preventDefault();
-
-		const newBlog =
-		{
-			"title": e.target.title.value,
-			"author": e.target.author.value,
-			"url": e.target.linkurl.value || ' '
-		}
-
-		
+	const handleCreateBlog = async (blogObject) => {
 		try {
-			const createdBlog = await blogService.create(newBlog)
+			const createdBlog = await blogService.create(blogObject)
 			console.log('createdBlog', createdBlog)
 			setRerender(!reRender)
-			createBlogFormRef.current.toggleVisibility()
 
-			setNotifications([`green`, `a new blog ${e.target.title.value} by ${e.target.author.value} added`])
+			setNotifications([`green`, `a new blog ${blogObject.title} by ${blogObject.author} added`])
 			setTimeout(() => {
 				setNotifications(null)
 			}, 5000)
@@ -139,11 +132,23 @@ const App = () => {
 					<h2>Blogs</h2>
 					<Notification notifications={notifications} />
 					<p>{user.name} logged in<button type="submit" onClick={handleLogout}>Logout</button></p>
-					<Togglable buttonLabel='createNewBlog' ref={createBlogFormRef}>
-						<CreateBlogForm handleCreateBlog={handleCreateBlog} />
+					<Togglable buttonLabel='Create new blog' ref={createBlogFormRef}>
+						<CreateBlogForm 
+						handleCreateBlog={handleCreateBlog} 
+						createBlogFormRef={createBlogFormRef}
+						/>
 					</Togglable>
 					<br />
-					{userBlogs}
+					<table >
+						<tr>
+							<th>Title</th>
+							<th>Author</th>
+							<th>Url</th>
+							<th>Likes</th>
+						</tr>
+						{userBlogs}
+					</table>
+					
 				</>
 			}
 		</div>

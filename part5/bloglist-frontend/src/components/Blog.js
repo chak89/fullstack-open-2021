@@ -2,9 +2,12 @@ import React from 'react'
 
 //"Paranthesis" to return an object.
 const Blog = ({ blog }) => (
-	<div>
-		{blog.title} {blog.author}
-	</div>
+		<tr>
+			<td>{blog.title}</td>
+			<td>{blog.author}</td>
+			<td>{blog.url}</td>
+			<td>{blog.likes}</td>
+		</tr>
 )
 
 export default Blog
