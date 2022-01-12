@@ -139,16 +139,7 @@ const App = () => {
 						/>
 					</Togglable>
 					<br />
-					<table >
-						<tr>
-							<th>Title</th>
-							<th>Author</th>
-							<th>Url</th>
-							<th>Likes</th>
-						</tr>
-						{userBlogs}
-					</table>
-					
+					{userBlogs}
 				</>
 			}
 		</div>
@@ -156,3 +147,14 @@ const App = () => {
 }
 
 export default App
+
+
+{/* <table >
+<tr>
+	<th>Title</th>
+	<th>Author</th>
+	<th>Url</th>
+	<th>Likes</th>
+</tr>
+{userBlogs}
+</table> */}
