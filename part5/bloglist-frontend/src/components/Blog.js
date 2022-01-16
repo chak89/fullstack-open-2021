@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 //"Paranthesis" to return an object.
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleIncreaseLike }) => {
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -23,6 +23,29 @@ const Blog = ({ blog }) => {
 		}
 	}
 
+	const addLike = (e) => {
+		e.preventDefault()
+
+		console.log(blog.title)
+		console.log(blog.author)
+		console.log(blog.url)
+		console.log(blog.likes)
+		console.log(blog.id)
+		console.log(blog.user.username)
+		console.log(blog.user.id)
+
+		
+		const updateBlog =
+		{
+			"user": blog.user.id,
+			"title": blog.title,
+			"author": blog.author,
+			"url": blog.url,
+			"likes": blog.likes + 1
+		}
+
+		handleIncreaseLike(updateBlog, blog.id)
+	}
 
 	return (
 		<div style={blogStyle}>
@@ -31,7 +54,7 @@ const Blog = ({ blog }) => {
 				</strong><button type="submit" onClick={handleButton}>{buttonLabel}</button>
 				<div style={showWhenVisible}>
 					<p>Url: {blog.url} </p>
-					<p>Likes: {blog.likes} <button type='submit'>Like</button></p> 
+					<p>Likes: {blog.likes} <button type='submit' onClick={addLike}>Like</button></p> 
 					<p>username: {blog.user.username}</p>
 				</div>
 			</div>
@@ -40,14 +63,3 @@ const Blog = ({ blog }) => {
 }
 
 export default Blog
-
-/*{ <tr>
-<td>{blog.title}</td>
-<td>{blog.author}</td>
-<td>{blog.url}</td>
-<td>{blog.likes}</td>
-</tr> 
-
-<button type="submit" onClick={handleDisplayInfo}>view</button>
-}
-*/

@@ -32,7 +32,8 @@ const App = () => {
 		if (user != null) {
 			const result = allBlogs
 				.filter((blog) => blog.user.username === user.username)
-				.map((blog) => <Blog key={blog.id} blog={blog} />)
+				.map((blog) => <Blog key={blog.id} blog={blog}
+					handleIncreaseLike={handleIncreaseLike} />)
 			setUserBlogs(result)
 		}
 	}, [allBlogs, user])
@@ -110,6 +111,28 @@ const App = () => {
 		}
 	}
 
+	const handleIncreaseLike = async (blogObject, blogId) => {
+		console.log('App.js -> handleIncreaseLike: Increase likes')
+		console.log('blogObject:', blogObject)
+		console.log('blogId:', blogId)
+		try {
+			const updatedBlog = await blogService.update(blogObject, blogId)
+			console.log('updatedBlog', updatedBlog)
+			setRerender(!reRender)
+
+			setNotifications([`green`, `Updated blog ${blogObject.title} by ${blogObject.author}`])
+			setTimeout(() => {
+				setNotifications(null)
+			}, 5000)
+		} catch (error) {
+			setNotifications([`red`, `Error updating blog`])
+			setTimeout(() => {
+				setNotifications(null)
+			}, 5000)
+		}
+	}
+
+
 	return (
 		<div>
 			{user === null ?
@@ -133,9 +156,9 @@ const App = () => {
 					<Notification notifications={notifications} />
 					<p>{user.name} logged in<button type="submit" onClick={handleLogout}>Logout</button></p>
 					<Togglable buttonLabel='Create new blog' ref={createBlogFormRef}>
-						<CreateBlogForm 
-						handleCreateBlog={handleCreateBlog} 
-						createBlogFormRef={createBlogFormRef}
+						<CreateBlogForm
+							handleCreateBlog={handleCreateBlog}
+							createBlogFormRef={createBlogFormRef}
 						/>
 					</Togglable>
 					<br />
@@ -147,14 +170,3 @@ const App = () => {
 }
 
 export default App
-
-
-{/* <table >
-<tr>
-	<th>Title</th>
-	<th>Author</th>
-	<th>Url</th>
-	<th>Likes</th>
-</tr>
-{userBlogs}
-</table> */}

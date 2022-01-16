@@ -25,11 +25,21 @@ const create = async (newBLog) => {
 	return response.data
 }
 
+const update = async (updateBlog, blogId) => {
+	const config = {
+		headers: { Authorization: token }
+	};
+
+	console.log('blogs.js -> updateBlog', updateBlog)
+	const response = await axios.put(`${baseUrl}/${blogId}`, updateBlog, config)
+	return response.data
+}
 
 const commands = {
 	getAll,
 	create,
-	setToken
+	setToken,
+	update
 }
 
 export default commands
