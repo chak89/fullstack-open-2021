@@ -32,8 +32,12 @@ const App = () => {
 		if (user != null) {
 			const result = allBlogs
 				.filter((blog) => blog.user.username === user.username)
+				.sort((a, b) => {
+					return b.likes - a.likes
+				})
 				.map((blog) => <Blog key={blog.id} blog={blog}
 					handleIncreaseLike={handleIncreaseLike} />)
+
 			setUserBlogs(result)
 		}
 	}, [allBlogs, user])
