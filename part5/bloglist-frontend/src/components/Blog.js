@@ -11,7 +11,7 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 		marginBottom: 5
 	}
 
-	const [buttonLabel, setButtonLabel] = useState("view")
+	const [buttonLabel, setButtonLabel] = useState('view')
 	const showWhenVisible = { display: buttonLabel === 'hide' ? '' : 'none' }
 
 	const handleButton = () => {
@@ -28,11 +28,11 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 
 		const updateBlog =
 		{
-			"user": blog.user.id,
-			"title": blog.title,
-			"author": blog.author,
-			"url": blog.url,
-			"likes": blog.likes + 1
+			'user': blog.user.id,
+			'title': blog.title,
+			'author': blog.author,
+			'url': blog.url,
+			'likes': blog.likes + 1
 		}
 
 		handleIncreaseLike(updateBlog, blog.id)

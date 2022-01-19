@@ -1,3 +1,4 @@
+import React from 'react'
 import './Notification.css'
 
 const Notifications = ({ notifications }) => {
@@ -7,7 +8,7 @@ const Notifications = ({ notifications }) => {
 
 	return (
 		<>
-			<div className={notifications[0] === 'red'? "notificationsError" : "notifications"}>
+			<div className={notifications[0] === 'red'? 'notificationsError' : 'notifications'}>
 				{notifications[1]}
 			</div>
 			<br />

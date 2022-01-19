@@ -1,3 +1,4 @@
+import React from 'react'
 import PropTypes from 'prop-types'
 
 const LoginForm = (props) => {
@@ -32,7 +33,7 @@ const LoginForm = (props) => {
 	}
 }
 
-//Enforce mandatory props with PropTypes 
+//Enforce mandatory props with PropTypes
 LoginForm.propTypes = {
 	username: PropTypes.string.isRequired,
 	setUsername: PropTypes.func.isRequired,

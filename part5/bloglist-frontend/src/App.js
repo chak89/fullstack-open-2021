@@ -30,7 +30,7 @@ const App = () => {
 	//After user login, show only blogs created by such user.
 	//Sort by likes in descending order.
 	useEffect(() => {
-		if (user != null) {
+		if (user !== null) {
 			const result = allBlogs
 				.filter((blog) => blog.user.username === user.username)
 				.sort((a, b) => {
@@ -93,8 +93,8 @@ const App = () => {
 
 	//Handles log out
 	const handleLogout = (e) => {
-		e.preventDefault();
-		window.localStorage.clear();
+		e.preventDefault()
+		window.localStorage.clear()
 		setUser(null)
 		blogService.setToken(null)
 	}
