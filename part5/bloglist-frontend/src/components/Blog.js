@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 //"Paranthesis" to return an object.
-const Blog = ({ blog, handleIncreaseLike }) => {
+const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -23,18 +23,9 @@ const Blog = ({ blog, handleIncreaseLike }) => {
 		}
 	}
 
-	const addLike = (e) => {
+	const handleAddLike = (e) => {
 		e.preventDefault()
 
-		console.log(blog.title)
-		console.log(blog.author)
-		console.log(blog.url)
-		console.log(blog.likes)
-		console.log(blog.id)
-		console.log(blog.user.username)
-		console.log(blog.user.id)
-
-		
 		const updateBlog =
 		{
 			"user": blog.user.id,
@@ -47,6 +38,14 @@ const Blog = ({ blog, handleIncreaseLike }) => {
 		handleIncreaseLike(updateBlog, blog.id)
 	}
 
+	const handleRemove = (e) => {
+		e.preventDefault()
+
+		if (window.confirm(`Remove blog: ${blog.title} by ${blog.author}`)) {
+			handleRemoveBlog(blog.id)
+		}
+	}
+
 	return (
 		<div style={blogStyle}>
 			<div>
@@ -54,8 +53,9 @@ const Blog = ({ blog, handleIncreaseLike }) => {
 				</strong><button type="submit" onClick={handleButton}>{buttonLabel}</button>
 				<div style={showWhenVisible}>
 					<p>Url: {blog.url} </p>
-					<p>Likes: {blog.likes} <button type='submit' onClick={addLike}>Like</button></p> 
+					<p>Likes: {blog.likes} <button type='submit' onClick={handleAddLike}>Like</button></p>
 					<p>username: {blog.user.username}</p>
+					<button type='submit' onClick={handleRemove}>remove blog</button>
 				</div>
 			</div>
 		</div>

@@ -27,7 +27,8 @@ const App = () => {
 	}, [reRender])
 
 
-	//After user login, show only blogs created by such user
+	//After user login, show only blogs created by such user.
+	//Sort by likes in descending order.
 	useEffect(() => {
 		if (user != null) {
 			const result = allBlogs
@@ -35,8 +36,11 @@ const App = () => {
 				.sort((a, b) => {
 					return b.likes - a.likes
 				})
-				.map((blog) => <Blog key={blog.id} blog={blog}
-					handleIncreaseLike={handleIncreaseLike} />)
+				.map((blog) =>
+					<Blog key={blog.id} blog={blog}
+						handleIncreaseLike={handleIncreaseLike}
+						handleRemoveBlog={handleRemoveBlog}
+					/>)
 
 			setUserBlogs(result)
 		}
@@ -130,6 +134,25 @@ const App = () => {
 			}, 5000)
 		} catch (error) {
 			setNotifications([`red`, `Error updating blog`])
+			setTimeout(() => {
+				setNotifications(null)
+			}, 5000)
+		}
+	}
+
+	const handleRemoveBlog = async (blogId) => {
+		console.log('App.js -> handleRemoveBlog() -> blogId: ', blogId)
+		try {
+			const removedBlog = await blogService.remove(blogId)
+			console.log('removedBlog: ', removedBlog)
+			setRerender(!reRender)
+
+			setNotifications([`green`, `Removed blog ${removedBlog.title} by ${removedBlog.author}`])
+			setTimeout(() => {
+				setNotifications(null)
+			}, 5000)
+		} catch (error) {
+			setNotifications([`red`, `Error removing blog`])
 			setTimeout(() => {
 				setNotifications(null)
 			}, 5000)
