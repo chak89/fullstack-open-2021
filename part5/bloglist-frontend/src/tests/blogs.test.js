@@ -32,7 +32,7 @@ describe('Test Blog component', () => {
 		expect(component.container).toHaveTextContent("Darkside of the Moon")
 		expect(component.container).toHaveTextContent("Pink Floyd")
 		expect(component.container).toHaveTextContent("http://pinkfloyd.com")
-	
+
 		const urlContent = component.container.querySelector('#url')
 		const likesContent = component.container.querySelector('#likes')
 		const usernameContent = component.container.querySelector('#username')
@@ -47,12 +47,10 @@ describe('Test Blog component', () => {
 	//when the button controlling the shown details has been clicked.
 	test('clicking the view button once to show extra information', () => {
 
-		const mockHandler = jest.fn()
-
 		const component = render(
-			<Blog blog={blog} toggleView={mockHandler} />
+			<Blog blog={blog} />
 		)
-		
+
 		const div = component.container.querySelector('.togglableContent')
 		const urlContent = component.container.querySelector('#url')
 		const likesContent = component.container.querySelector('#likes')
@@ -71,5 +69,27 @@ describe('Test Blog component', () => {
 		expect(likesContent).toBeVisible()
 		expect(usernameContent).toBeVisible()
 	})
+
+
+	//Ensures that if the like button is clicked twice, 
+	//the event handler the component received as props is called twice.
+	test('Like button clicked twice, event handler also called twice', () => {
+
+		const mockCallBack = jest.fn()
+
+		const component = render(
+			<Blog blog={blog} handleIncreaseLike={mockCallBack} />
+		)
+
+		const button = component.getByText('view')
+		fireEvent.click(button)
+
+		const likeButton = component.getByText("Like");
+    fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
+
+		expect(mockCallBack).toHaveBeenCalledTimes(2)
+	})
+
 })
 
