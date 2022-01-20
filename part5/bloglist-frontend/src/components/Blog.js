@@ -51,10 +51,10 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 			<div>
 				<strong>{blog.title} - {blog.author}
 				</strong><button type="submit" onClick={handleButton}>{buttonLabel}</button>
-				<div style={showWhenVisible}>
-					<p>Url: {blog.url} </p>
-					<p>Likes: {blog.likes} <button type='submit' onClick={handleAddLike}>Like</button></p>
-					<p>username: {blog.user.username}</p>
+				<div style={showWhenVisible} className='togglableContent'>
+					<p id='url'>Url: {blog.url} </p>
+					<p id='likes'>Likes: {blog.likes} <button type='submit' onClick={handleAddLike}>Like</button></p>
+					<p id='username'>username: {blog.user.username}</p>
 					<button type='submit' onClick={handleRemove}>remove blog</button>
 				</div>
 			</div>
