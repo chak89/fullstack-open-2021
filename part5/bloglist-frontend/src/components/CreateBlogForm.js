@@ -17,7 +17,9 @@ const CreateBlogForm = ({ handleCreateBlog, createBlogFormRef }) => {
 		}
 
 		//RefHook, close blog form after submit
-		createBlogFormRef.current.toggleVisibility()
+		if(createBlogFormRef?.current) {
+			createBlogFormRef.current.toggleVisibility()
+		}
 
 		setTitle('')
 		setAuthor('')
@@ -33,6 +35,7 @@ const CreateBlogForm = ({ handleCreateBlog, createBlogFormRef }) => {
 				<div>
 					title:
 					<input
+						id='formTitle'
 						type='text'
 						name='title'
 						value={title}
@@ -42,6 +45,7 @@ const CreateBlogForm = ({ handleCreateBlog, createBlogFormRef }) => {
 				<div>
 					author:
 					<input
+						id='formAuthor'
 						type='text'
 						name='author'
 						value={author}
@@ -51,6 +55,7 @@ const CreateBlogForm = ({ handleCreateBlog, createBlogFormRef }) => {
 				<div>
 					url:
 					<input
+						id='formUrl'
 						type='text'
 						name='linkurl'
 						value={linkurl}
