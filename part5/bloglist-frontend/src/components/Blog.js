@@ -55,7 +55,7 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 					<p id='url'>Url: {blog.url} </p>
 					<p id='likes'>Likes: {blog.likes} <button id='likeButton' type='submit' onClick={handleAddLike}>Like</button></p>
 					<p id='username'>username: {blog.user.username}</p>
-					<button type='submit' onClick={handleRemove}>remove blog</button>
+					<button id='removeBlog' type='submit' onClick={handleRemove}>remove blog</button>
 				</div>
 			</div>
 		</div>

@@ -69,6 +69,24 @@ describe('Blog app', function() {
 			cy.get('#likeButton').click()
 			cy.get('#likes').should('be.visible').and('contain', 'Likes: 1')
     })
+
+		it('User can delete own blogs', function() {
+			cy.visit('http://localhost:3000')
+			cy.contains('login').click()
+			cy.get('#username').type('testUser')
+			cy.get('#password').type('testPassword')
+			cy.get('#login-button').click()
+			cy.contains('Create new blog').click()
+			cy.get('#formTitle').type('TestBlog1')
+			cy.get('#formAuthor').type('TestBlogAuhor1')
+			cy.get('#formUrl').type('www.testblog1.com')
+			cy.get('#createBlog').click()
+			cy.contains('a new blog TestBlog1 by TestBlogAuhor1 added')
+
+			cy.contains('view').click()
+			cy.get('#removeBlog').should('be.visible').click()
+			cy.contains('Removed blog TestBlog1 by TestBlogAuhor1')
+    })
   })
 
 })
