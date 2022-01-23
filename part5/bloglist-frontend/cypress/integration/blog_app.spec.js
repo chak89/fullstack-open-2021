@@ -35,4 +35,21 @@ describe('Blog app', function() {
 			cy.contains('wrong username or password')
     })
   })
+
+	describe('When logged in', function() {
+    it('A blog can be created', function() {
+			cy.visit('http://localhost:3000')
+			cy.contains('login').click()
+			cy.get('#username').type('testUser')
+			cy.get('#password').type('testPassword')
+			cy.get('#login-button').click()
+			cy.contains('Create new blog').click()
+			cy.get('#formTitle').type('TestBlog1')
+			cy.get('#formAuthor').type('TestBlogAuhor1')
+			cy.get('#formUrl').type('www.testblog1.com')
+			cy.get('#createBlog').click()
+			cy.contains('a new blog TestBlog1 by TestBlogAuhor1 added')
+    })
+  })
+
 })
