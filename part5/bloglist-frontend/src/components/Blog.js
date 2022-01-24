@@ -48,7 +48,7 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 
 	return (
 		<div style={blogStyle}>
-			<div>
+			<div className='userBlogs'>
 				<strong>{blog.title} - {blog.author}
 				</strong><button type="submit" onClick={handleButton}>{buttonLabel}</button>
 				<div style={showWhenVisible} className='togglableContent'>
