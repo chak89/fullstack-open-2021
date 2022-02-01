@@ -1,5 +1,5 @@
 import React from 'react'
-import { createAnecdote } from './reducers/anecdoteReducer'
+import { createAnecdote, voteAnecdote } from './reducers/anecdoteReducer'
 import { useSelector, useDispatch } from 'react-redux'
 
 const App = () => {
@@ -7,12 +7,7 @@ const App = () => {
 	const dispatch = useDispatch()
 
 	const vote = (id) => {
-		dispatch({
-			type: 'VOTE',
-			data: {
-				id: id
-			}
-		})
+		dispatch(voteAnecdote(id))
 	}
 
 	const addAnecdote = (event) => {
@@ -23,7 +18,7 @@ const App = () => {
 	}
 
 	const sortedAnecdotes = anecdotes.sort((a, b) => {
-		return b.votes - a.votes 
+		return b.votes - a.votes
 	})
 
 	return (
