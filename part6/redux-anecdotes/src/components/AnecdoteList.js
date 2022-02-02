@@ -6,22 +6,23 @@ import { useSelector, useDispatch } from 'react-redux'
 const AnecdoteList = () => {
 
 	const anecdotes = useSelector(state => state.anecdotes)
+	const textToFilter = useSelector(state => state.filter)
 	const dispatch = useDispatch()
 
 	const vote = (id, content) => {
 		dispatch(voteAnecdote(id))
 
 		dispatch(showNotification(`you voted '${content}'`))
-    setTimeout(() => dispatch(removeNotification()), 5000);
+		setTimeout(() => dispatch(removeNotification()), 5000);
 	}
 
-	const sortedAnecdotes = anecdotes.sort((a, b) => {
-		return b.votes - a.votes
-	})
+	const filteredAndSortedAnecdotes = anecdotes
+		.filter((anecdote) => {return anecdote.content.toLowerCase().includes(textToFilter.toLowerCase())})
+		.sort((a, b) => { return b.votes - a.votes })
 
 	return (
 		<>
-			{sortedAnecdotes.map(anecdote =>
+			{filteredAndSortedAnecdotes.map(anecdote =>
 				<div key={anecdote.id}>
 					<div>
 						{anecdote.content}

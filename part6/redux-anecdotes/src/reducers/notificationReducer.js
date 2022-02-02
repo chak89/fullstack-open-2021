@@ -14,7 +14,7 @@ export const removeNotification = () => {
 }
 
 
-const reducer = (state = null, action) => {
+const notificationReducer = (state = null, action) => {
 	console.log('state now: ', state)
 	console.log('action', action)
 
@@ -28,4 +28,4 @@ const reducer = (state = null, action) => {
 	}
 }
 
-export default reducer;
+export default notificationReducer;
