@@ -1,8 +1,11 @@
 
-export const showNotification = (content) => {
-	return {
-		type: 'SHOW_NOTIFICATION',
-		data: content
+export const showNotification = (content, timeInSeconds) => {
+	return async dispatch => {
+		dispatch({
+			type: 'SHOW_NOTIFICATION',
+			data: content
+		})
+		setTimeout(() => dispatch(removeNotification()), timeInSeconds*1000);
 	}
 }
 
@@ -12,7 +15,6 @@ export const removeNotification = () => {
 		data: null
 	}
 }
-
 
 const notificationReducer = (state = null, action) => {
 /* 	console.log('state now: ', state)
