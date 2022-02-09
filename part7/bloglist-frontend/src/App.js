@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { showNotification } from './reducers/notificationReducer'
+
 import './App.css'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -14,10 +17,11 @@ const App = () => {
 	const [user, setUser] = useState(null)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const [notifications, setNotifications] = useState(null)
 	const [reRender, setRerender] = useState(false)
 
 	const createBlogFormRef = useRef()
+
+	const dispatch = useDispatch()
 
 	//Fetch all blogs once at start
 	useEffect(() => {
@@ -84,10 +88,7 @@ const App = () => {
 				'loggedInBlogUser', JSON.stringify(respondedUser)
 			)
 		} else {
-			setNotifications([`red`, `wrong username or password`])
-			setTimeout(() => {
-				setNotifications(null)
-			}, 5000)
+			dispatch(showNotification('wrong username or password', 'error', 3))
 		}
 	}
 
@@ -106,16 +107,9 @@ const App = () => {
 			const createdBlog = await blogService.create(blogObject)
 			console.log('createdBlog', createdBlog)
 			setRerender(!reRender)
-
-			setNotifications([`green`, `a new blog ${blogObject.title} by ${blogObject.author} added`])
-			setTimeout(() => {
-				setNotifications(null)
-			}, 5000)
+			dispatch(showNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`, 'success', 3))
 		} catch (error) {
-			setNotifications([`red`, `Error creating new blog`])
-			setTimeout(() => {
-				setNotifications(null)
-			}, 5000)
+			dispatch(showNotification(`Error creating new blog`, 'error', 3))
 		}
 	}
 
@@ -127,16 +121,9 @@ const App = () => {
 			const updatedBlog = await blogService.update(blogObject, blogId)
 			console.log('updatedBlog', updatedBlog)
 			setRerender(!reRender)
-
-			setNotifications([`green`, `Updated blog ${blogObject.title} by ${blogObject.author}`])
-			setTimeout(() => {
-				setNotifications(null)
-			}, 5000)
+			dispatch(showNotification(`Updated blog ${blogObject.title} by ${blogObject.author}`, 'success', 3))
 		} catch (error) {
-			setNotifications([`red`, `Error updating blog`])
-			setTimeout(() => {
-				setNotifications(null)
-			}, 5000)
+			dispatch(showNotification(`Error updating blog`, 'error', 3))
 		}
 	}
 
@@ -146,16 +133,9 @@ const App = () => {
 			const removedBlog = await blogService.remove(blogId)
 			console.log('removedBlog: ', removedBlog)
 			setRerender(!reRender)
-
-			setNotifications([`green`, `Removed blog ${removedBlog.title} by ${removedBlog.author}`])
-			setTimeout(() => {
-				setNotifications(null)
-			}, 5000)
+			dispatch(showNotification(`Removed blog ${removedBlog.title} by ${removedBlog.author}`, 'success', 3))
 		} catch (error) {
-			setNotifications([`red`, `Error removing blog`])
-			setTimeout(() => {
-				setNotifications(null)
-			}, 5000)
+			dispatch(showNotification(`Error removing blog`, 'error', 3))
 		}
 	}
 
@@ -165,7 +145,7 @@ const App = () => {
 			{user === null ?
 				<>
 					<h2>Log in to application</h2>
-					<Notification notifications={notifications} />
+					<Notification />
 					<Togglable buttonLabel='login'>
 						<LoginForm
 							user={user}
@@ -180,7 +160,7 @@ const App = () => {
 				:
 				<>
 					<h2>Blogs</h2>
-					<Notification notifications={notifications} />
+					<Notification />
 					<p>{user.name} logged in<button type="submit" onClick={handleLogout}>Logout</button></p>
 					<Togglable buttonLabel='Create new blog' ref={createBlogFormRef}>
 						<CreateBlogForm

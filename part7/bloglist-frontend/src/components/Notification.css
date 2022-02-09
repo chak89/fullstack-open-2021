@@ -1,4 +1,4 @@
-.notifications {
+.notificationSuccess {
 	color: green;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -9,7 +9,7 @@
 
 }
 
-.notificationsError {
+.notificationError {
 	color: red;
 	padding-top: 10px;
 	padding-bottom: 10px;

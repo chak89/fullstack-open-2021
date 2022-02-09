@@ -1,19 +1,24 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import './Notification.css'
 
-const Notifications = ({ notifications }) => {
-	if (notifications === null) {
+const Notification = () => {
+	const notification = useSelector(state => state.notification)
+
+	console.log('Notification -> notification:', notification)
+
+	if (notification === null) {
 		return null
 	}
 
 	return (
 		<>
-			<div className={notifications[0] === 'red'? 'notificationsError' : 'notifications'}>
-				{notifications[1]}
+			<div className={notification.status === 'success' ? 'notificationSuccess' : 'notificationError'}>
+				{notification.data}
 			</div>
 			<br />
 		</>
 	)
 }
 
-export default Notifications
+export default Notification
