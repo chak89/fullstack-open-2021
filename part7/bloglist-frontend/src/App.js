@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { showNotification } from './reducers/notificationReducer'
+import { fetchAllBlogs } from './reducers/blogReducers'
 
 import './App.css'
-import Blog from './components/Blog'
+import DisplayBlog from './components/DisplayBlog'
 import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
 import blogService from './services/blogs'
@@ -11,9 +12,8 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
+
 const App = () => {
-	const [allBlogs, setAllBlogs] = useState([])
-	const [userBlogs, setUserBlogs] = useState([])
 	const [user, setUser] = useState(null)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
@@ -23,33 +23,10 @@ const App = () => {
 
 	const dispatch = useDispatch()
 
-	//Fetch all blogs once at start
+	//Fetch all blogs once at start, and when rerender
 	useEffect(() => {
-		blogService.getAll().then(blogs =>
-			setAllBlogs(blogs)
-		)
+		dispatch(fetchAllBlogs())
 	}, [reRender])
-
-
-	//After user login, show only blogs created by such user.
-	//Sort by likes in descending order.
-	useEffect(() => {
-		if (user !== null) {
-			const result = allBlogs
-				.filter((blog) => blog.user.username === user.username)
-				.sort((a, b) => {
-					return b.likes - a.likes
-				})
-				.map((blog) =>
-					<Blog key={blog.id} blog={blog}
-						handleIncreaseLike={handleIncreaseLike}
-						handleRemoveBlog={handleRemoveBlog}
-					/>)
-
-			setUserBlogs(result)
-		}
-	}, [allBlogs, user])
-
 
 	//Check if user detailed of a logged-in user can already found on the local storage after refresh
 	useEffect(() => {
@@ -169,7 +146,7 @@ const App = () => {
 						/>
 					</Togglable>
 					<br />
-					{userBlogs}
+					<DisplayBlog handleIncreaseLike={handleIncreaseLike} handleRemoveBlog={handleRemoveBlog} />
 				</>
 			}
 		</div>
