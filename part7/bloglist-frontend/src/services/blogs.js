@@ -13,9 +13,6 @@ const getAll = async () => {
 	console.log('blogs.js -> getAll:')
 	const response = await axios.get(baseUrl)
 	return response.data
-
-/* 	const request = axios.get(baseUrl)
-	return request.then(response => response.data) */
 }
 
 const create = async (newBLog) => {
@@ -23,7 +20,7 @@ const create = async (newBLog) => {
 		headers: { Authorization: token }
 	}
 
-	console.log('blogs.js -> newBLog', newBLog)
+	console.log('blogs.js -> create() -> newBLog', newBLog)
 	const response = await axios.post(baseUrl, newBLog, config)
 	return response.data
 }

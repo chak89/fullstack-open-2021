@@ -1,31 +1,36 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useField } from '../hooks/index'
+import { createBlog } from '../reducers/blogReducers'
 
 //"Paranthesis" to return an object.
-const CreateBlogForm = ({ handleCreateBlog, createBlogFormRef }) => {
-	const [title, setTitle] = useState('')
-	const [author, setAuthor] = useState('')
-	const [linkurl, setLinkurl] = useState('')
+const CreateBlogForm = ({ createBlogFormRef }) => {
+	const { reset: resetTitle, ...title } = useField('formTitle', 'text')
+	const { reset: resetAuthor, ...author } = useField('formAuthor', 'text')
+	const { reset: resetLinkurl, ...linkurl } = useField('formUrl', 'text')
 
-	const addBlog = (e) => {
-		e.preventDefault()
+	const dispatch = useDispatch()
+
+	const addBlog = async (event) => {
+		event.preventDefault()
 
 		const newBlog =
 		{
-			'title': title,
-			'author': author,
-			'url': linkurl || ' '
+			'title': title.value,
+			'author': author.value,
+			'url': linkurl.value || ' '
 		}
 
+		resetTitle()
+		resetAuthor()
+		resetLinkurl()
+
 		//RefHook, close blog form after submit
-		if(createBlogFormRef?.current) {
+		if (createBlogFormRef?.current) {
 			createBlogFormRef.current.toggleVisibility()
 		}
 
-		setTitle('')
-		setAuthor('')
-		setLinkurl('')
-
-		handleCreateBlog(newBlog)
+		dispatch(createBlog(newBlog))
 	}
 
 	return (
@@ -34,33 +39,15 @@ const CreateBlogForm = ({ handleCreateBlog, createBlogFormRef }) => {
 			<form onSubmit={addBlog}>
 				<div>
 					title:
-					<input
-						id='formTitle'
-						type='text'
-						name='title'
-						value={title}
-						onChange={(event => setTitle(event.target.value))}
-					/>
+					<input name='title' {...title} />
 				</div>
 				<div>
 					author:
-					<input
-						id='formAuthor'
-						type='text'
-						name='author'
-						value={author}
-						onChange={(event => setAuthor(event.target.value))}
-					/>
+					<input name='author' {...author} />
 				</div>
 				<div>
 					url:
-					<input
-						id='formUrl'
-						type='text'
-						name='linkurl'
-						value={linkurl}
-						onChange={(event => setLinkurl(event.target.value))}
-					/>
+					<input name='linkurl' {...linkurl} />
 				</div>
 				<button id='createBlog' type='submit'>create</button>
 			</form>

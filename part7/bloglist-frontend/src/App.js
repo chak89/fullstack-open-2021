@@ -12,21 +12,19 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
-
 const App = () => {
 	const [user, setUser] = useState(null)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const [reRender, setRerender] = useState(false)
 
 	const createBlogFormRef = useRef()
 
 	const dispatch = useDispatch()
 
-	//Fetch all blogs once at start, and when rerender
+	//Fetch all blogs once at start
 	useEffect(() => {
 		dispatch(fetchAllBlogs())
-	}, [reRender])
+	}, [])
 
 	//Check if user detailed of a logged-in user can already found on the local storage after refresh
 	useEffect(() => {
@@ -77,46 +75,6 @@ const App = () => {
 		blogService.setToken(null)
 	}
 
-
-	//Handles create new blog
-	const handleCreateBlog = async (blogObject) => {
-		try {
-			const createdBlog = await blogService.create(blogObject)
-			console.log('createdBlog', createdBlog)
-			setRerender(!reRender)
-			dispatch(showNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`, 'success', 3))
-		} catch (error) {
-			dispatch(showNotification(`Error creating new blog`, 'error', 3))
-		}
-	}
-
-	const handleIncreaseLike = async (blogObject, blogId) => {
-		console.log('App.js -> handleIncreaseLike: Increase likes')
-		console.log('blogObject:', blogObject)
-		console.log('blogId:', blogId)
-		try {
-			const updatedBlog = await blogService.update(blogObject, blogId)
-			console.log('updatedBlog', updatedBlog)
-			setRerender(!reRender)
-			dispatch(showNotification(`Updated blog ${blogObject.title} by ${blogObject.author}`, 'success', 3))
-		} catch (error) {
-			dispatch(showNotification(`Error updating blog`, 'error', 3))
-		}
-	}
-
-	const handleRemoveBlog = async (blogId) => {
-		console.log('App.js -> handleRemoveBlog() -> blogId: ', blogId)
-		try {
-			const removedBlog = await blogService.remove(blogId)
-			console.log('removedBlog: ', removedBlog)
-			setRerender(!reRender)
-			dispatch(showNotification(`Removed blog ${removedBlog.title} by ${removedBlog.author}`, 'success', 3))
-		} catch (error) {
-			dispatch(showNotification(`Error removing blog`, 'error', 3))
-		}
-	}
-
-
 	return (
 		<div>
 			{user === null ?
@@ -141,12 +99,11 @@ const App = () => {
 					<p>{user.name} logged in<button type="submit" onClick={handleLogout}>Logout</button></p>
 					<Togglable buttonLabel='Create new blog' ref={createBlogFormRef}>
 						<CreateBlogForm
-							handleCreateBlog={handleCreateBlog}
 							createBlogFormRef={createBlogFormRef}
 						/>
 					</Togglable>
 					<br />
-					<DisplayBlog handleIncreaseLike={handleIncreaseLike} handleRemoveBlog={handleRemoveBlog} />
+					<DisplayBlog />
 				</>
 			}
 		</div>

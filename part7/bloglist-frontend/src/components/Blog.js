@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogReducers'
 
 //"Paranthesis" to return an object.
-const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
+const Blog = ({ blog }) => {
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -13,6 +15,7 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 
 	const [buttonLabel, setButtonLabel] = useState('view')
 	const showWhenVisible = { display: buttonLabel === 'hide' ? '' : 'none' }
+	const dispatch = useDispatch()
 
 	const handleButton = () => {
 		if (buttonLabel === 'view') {
@@ -25,24 +28,14 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 
 	const handleAddLike = (e) => {
 		e.preventDefault()
-
-		const updateBlog =
-		{
-			'user': blog.user.id,
-			'title': blog.title,
-			'author': blog.author,
-			'url': blog.url,
-			'likes': blog.likes + 1
-		}
-
-		handleIncreaseLike(updateBlog, blog.id)
+		dispatch(likeBlog(blog))
 	}
 
-	const handleRemove = (e) => {
+	const handleRemoveBlog = (e) => {
 		e.preventDefault()
 
 		if (window.confirm(`Remove blog: ${blog.title} by ${blog.author}`)) {
-			handleRemoveBlog(blog.id)
+			dispatch(deleteBlog(blog.id))
 		}
 	}
 
@@ -55,7 +48,7 @@ const Blog = ({ blog, handleIncreaseLike, handleRemoveBlog }) => {
 					<p id='url'>Url: {blog.url} </p>
 					<p id='likes'>Likes: {blog.likes} <button id='likeButton' type='submit' onClick={handleAddLike}>Like</button></p>
 					<p id='username'>username: {blog.user.username}</p>
-					<button id='removeBlog' type='submit' onClick={handleRemove}>remove blog</button>
+					<button id='removeBlog' type='submit' onClick={handleRemoveBlog}>remove blog</button>
 				</div>
 			</div>
 		</div>

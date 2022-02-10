@@ -2,10 +2,10 @@ import React from 'react'
 import Blog from './Blog'
 import { useSelector } from 'react-redux'
 
-const DisplayBlog = ({ handleIncreaseLike, handleRemoveBlog }) => {
+const DisplayBlog = () => {
 	const blogs = useSelector(state => state.blog)
 
-	if( blogs === null) {
+	if (blogs === null) {
 		return null
 	}
 
@@ -16,10 +16,7 @@ const DisplayBlog = ({ handleIncreaseLike, handleRemoveBlog }) => {
 					return b.likes - a.likes
 				})
 				.map((blog) =>
-					<Blog key={blog.id} blog={blog}
-						handleIncreaseLike={handleIncreaseLike}
-						handleRemoveBlog={handleRemoveBlog}
-					/>)
+					<Blog key={blog.id} blog={blog} />)
 			}
 		</div>
 	)
