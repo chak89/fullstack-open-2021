@@ -4,23 +4,33 @@ import { showNotification } from './notificationReducer'
 
 export const userLogin = (credentials) => {
 	return async dispatch => {
-		try {
-			console.log('userReducer.js -> userLogin() -> credentials:', credentials)
-			const respondedUser = await loginService.login(credentials)
-			console.log('userReducer.js -> userLogin() -> respondedUser:', respondedUser)
-			dispatch({
-				type: 'USER_LOGIN',
-				data: respondedUser
-			})
-
+		const onSuccess = (respondedUser) => {
+			console.log('userLogin -> onSuccess()')
 			//Set user token
-			console.log('userReducer.js -> userLogin() -> respondedUser.token:', respondedUser.token)
 			blogService.setToken(respondedUser.token)
 			window.localStorage.setItem(
 				'loggedInBlogUser', JSON.stringify(respondedUser)
 			)
-		} catch (error) {
+			return dispatch({
+				type: 'USER_LOGIN',
+				data: respondedUser
+			})
+		}
+
+		const onError = (error) => {
+			console.log('userLogin -> onError() -> error:', error)
 			dispatch(showNotification('wrong username or password', 'error', 3))
+			return dispatch({
+				type: 'USER_LOGIN_ERROR',
+				error
+			})
+		}
+
+		try {
+			const respondedUser = await loginService.login(credentials)
+			return onSuccess(respondedUser)
+		} catch (error) {
+			return onError(error)
 		}
 	}
 }
@@ -55,6 +65,8 @@ const userReducer = (state = null, action) => {
 			return action.data
 		case 'SET_USER':
 			return action.data
+		case 'USER_LOGIN_ERROR':
+			return null
 		default:
 			return state
 	}

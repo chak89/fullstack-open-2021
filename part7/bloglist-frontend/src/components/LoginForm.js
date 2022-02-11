@@ -2,6 +2,9 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useField } from '../hooks'
 import { userLogin } from '../reducers/userReducer'
+import {
+	useNavigate
+} from 'react-router-dom'
 //import PropTypes from 'prop-types'
 
 const LoginForm = () => {
@@ -9,6 +12,7 @@ const LoginForm = () => {
 	const { reset: resetPassword, ...password } = useField('password', 'password')
 
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 	const user = useSelector(state => state.user)
 
 	const handleLogin = async (event) => {
@@ -18,6 +22,8 @@ const LoginForm = () => {
 			'username': username.value,
 			'password': password.value
 		}))
+			.then(result => result.type === 'USER_LOGIN' ? navigate('/users') : navigate('/'))
+
 		resetUserName()
 		resetPassword()
 	}
