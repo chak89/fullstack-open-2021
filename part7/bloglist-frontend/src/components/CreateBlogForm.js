@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useField } from '../hooks/index'
-import { createBlog } from '../reducers/blogReducers'
+import { createBlog } from '../reducers/blogReducer'
 
 //"Paranthesis" to return an object.
 const CreateBlogForm = ({ createBlogFormRef }) => {

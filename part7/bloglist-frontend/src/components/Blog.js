@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { likeBlog, deleteBlog } from '../reducers/blogReducers'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
 //"Paranthesis" to return an object.
 const Blog = ({ blog }) => {
