@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAllBlogs } from './reducers/blogReducer'
-import { setUser, userLogout,  } from './reducers/userReducer'
+import { setUser, userLogout, } from './reducers/userReducer'
+import { getAllUsers } from './reducers/userListReducer'
 
 import './App.css'
 import DisplayBlog from './components/DisplayBlog'
@@ -9,10 +10,12 @@ import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import UserList from './components/UserList'
 
 const App = () => {
 	//const [user, setUser] = useState(null)
 	const user = useSelector(state => state.user)
+	const blog = useSelector(state => state.blog)
 
 	const createBlogFormRef = useRef()
 	const dispatch = useDispatch()
@@ -21,6 +24,12 @@ const App = () => {
 	useEffect(() => {
 		dispatch(fetchAllBlogs())
 	}, [])
+
+	//Get all users once at start and when new blog is created
+	useEffect(() => {
+		dispatch(getAllUsers())
+	}, [blog])
+
 
 	//Check if user detailed of a logged-in user can already found on the local storage after refresh
 	useEffect(() => {
@@ -54,6 +63,7 @@ const App = () => {
 					</Togglable>
 					<br />
 					<DisplayBlog />
+					<UserList />
 				</>
 			}
 		</div>
