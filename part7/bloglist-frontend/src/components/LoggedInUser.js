@@ -1,7 +1,9 @@
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-	useNavigate
+	Routes,
+	Route,
+	useNavigate,
 } from 'react-router-dom'
 
 import { userLogout } from '../reducers/userReducer'
@@ -10,6 +12,7 @@ import CreateBlogForm from './CreateBlogForm'
 import Togglable from './Togglable'
 import UserList from './UserList'
 import DisplayBlog from './DisplayBlog'
+import UserBlog from './UserBlog'
 
 const LoggedInUser = () => {
 	const createBlogFormRef = useRef()
@@ -32,6 +35,9 @@ const LoggedInUser = () => {
 			<br />
 			<DisplayBlog />
 			<UserList />
+			<Routes>
+				<Route path='/:id' element={<UserBlog />} />
+			</Routes>
 		</div>
 	)
 }

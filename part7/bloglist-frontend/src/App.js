@@ -46,8 +46,8 @@ const App = () => {
 			<div>
 				<Notification />
 				<Routes>
-					<Route path='/users' element={<LoggedInUser />}/>
-					<Route path='/' element={<Home />}/>
+					<Route path='/users/*' element={<LoggedInUser />} />
+					<Route path='/' element={<Home />} />
 				</Routes>
 			</div>
 		</Router >
