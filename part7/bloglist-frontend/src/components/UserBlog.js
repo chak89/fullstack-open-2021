@@ -11,6 +11,10 @@ const UserBlog = () => {
 
 	console.log('IN USERBLOG.js -> id', id)
 
+	if(!userList) {
+		return null
+	}
+
 	//IIFE
 	const selectedUser = (() => {
 		return userList.find(user => user.id === id)

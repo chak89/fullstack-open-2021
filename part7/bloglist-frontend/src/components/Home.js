@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import LoginForm from './LoginForm'
 import Togglable from './Togglable'
 import { useSelector } from 'react-redux'
@@ -11,9 +11,12 @@ const Home = () => {
 	const navigate = useNavigate()
 	const user = useSelector(state => state.user)
 
-	if(user !== null) {
-		navigate('/users')
-	}
+	useEffect(() => {
+		if(user !== null) {
+			navigate('/users')
+		}
+	}, [user])
+
 
 	return (
 		<div>

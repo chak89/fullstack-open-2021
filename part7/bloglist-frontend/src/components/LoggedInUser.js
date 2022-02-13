@@ -25,6 +25,10 @@ const LoggedInUser = () => {
 		navigate('/')
 	}
 
+	if(!user) {
+		return null
+	}
+
 	return (
 		<div>
 			<h2>Blogs</h2>
