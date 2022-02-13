@@ -46,12 +46,23 @@ const remove = async (blogId) => {
 	return response.data
 }
 
+const addComments = async (updateBlog, blogId) => {
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	console.log('blogs.js -> addComments', updateBlog)
+	const response = await axios.put(`${baseUrl}/${blogId}/comments`, updateBlog, config)
+	return response.data
+}
+
 const commands = {
 	getAll,
 	create,
 	setToken,
 	update,
-	remove
+	remove,
+	addComments
 }
 
 export default commands

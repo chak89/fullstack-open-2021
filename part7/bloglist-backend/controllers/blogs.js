@@ -135,6 +135,7 @@ blogsRouter.put('/:id/comments', async (request, response) => {
 	}
 
 	const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, addNewComments, { new: true })
+	logger.info('blogsRouter.put(/:id/comments) -> updatedBlog: ', updatedBlog)
 	response.json(updatedBlog);
 })
 

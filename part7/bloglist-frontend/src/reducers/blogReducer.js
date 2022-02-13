@@ -86,6 +86,32 @@ export const deleteBlog = (blogId) => {
 	}
 }
 
+
+//Comment a blog
+export const commentBlog = (comment, blogId) => {
+	return async dispatch => {
+
+		const updatedBlog = {
+			'comments': [comment]
+		}
+
+		try {
+			console.log('blogReducer.js -> commentBlog() -> updatedBlog:', updatedBlog)
+			const returnedBlog = await blogsService.addComments(updatedBlog, blogId)
+			console.log('blogReducer.js -> commentBlog()-> returnedBlog:', returnedBlog)
+			dispatch({
+				type: 'COMMENT_BLOG',
+				data: returnedBlog
+			})
+			dispatch(showNotification(`Updated blog ${returnedBlog.title} by ${returnedBlog.author}`, 'success', 3))
+		} catch (error) {
+			console.log('error:', error)
+			dispatch(showNotification(`Error updating blog`, 'error', 3))
+		}
+	}
+}
+
+
 //Reducer
 const blogReducer = (state = null, action) => {
 	console.log('blogReducer() -> action:', action)
@@ -106,6 +132,16 @@ const blogReducer = (state = null, action) => {
 		}
 		case 'DELETE_BLOG':
 			return state.filter(elem => elem.id !== action.data.id)
+		case 'COMMENT_BLOG': {
+			const id = action.data.id
+			const blogToComment = state.find(b => b.id === id)
+			const changedBlog = {
+				...blogToComment,
+				comments: action.data.comments
+			}
+			return state.map(elem =>
+				elem.id !== id ? elem : changedBlog)
+		}
 		default:
 			return state
 	}
