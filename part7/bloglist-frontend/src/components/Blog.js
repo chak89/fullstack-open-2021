@@ -15,7 +15,7 @@ const Blog = () => {
 
 	const blogs = useSelector(state => state.blog)
 
-	if(!blogs) {
+	if (!blogs) {
 		return null
 	}
 
@@ -43,6 +43,16 @@ const Blog = () => {
 				<p id='likes'>Likes: {blog.likes} <button id='likeButton' type='submit' onClick={handleAddLike}>Like</button></p>
 				<p id='username'>Added by: {blog.user.username}</p>
 				<button id='removeBlog' type='submit' onClick={handleRemoveBlog}>remove blog</button>
+				<div>
+					<h3>Comments</h3>
+					<ul>
+						{blog.comments
+							.map((element, index) =>
+								<li key={index}>{element}</li>
+							)
+						}
+					</ul>
+				</div>
 			</div>
 		</div>
 	)

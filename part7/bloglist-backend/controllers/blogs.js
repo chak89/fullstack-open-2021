@@ -41,7 +41,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 
 //Delete a blog by id
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
-logger.info('blogs.js -> blogsRouter.delete')
+	logger.info('blogs.js -> blogsRouter.delete')
 	const blog = await Blog.findById(request.params.id)
 
 	if (blog === null) {
@@ -88,7 +88,8 @@ blogsRouter.get('/:id', async (request, response) => {
 
 //Update a blog by id
 blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
-	logger.info('blogsRouter.put -> request.body', request.body)
+	logger.info('blogs.js -> blogsRouter.put(/:id)')
+	logger.info('blogsRouter.put(/:id) -> request.body', request.body)
 	const body = request.body
 
 	const blog = await Blog.findById(request.params.id)
@@ -112,5 +113,30 @@ blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
 		)
 	}
 })
+
+//Comment a blog
+blogsRouter.put('/:id/comments', async (request, response) => {
+	logger.info('blogs.js -> blogsRouter.put(/:id/comments)')
+	logger.info('blogsRouter.put(/:id/comments) -> request.body', request.body)
+	const body = request.body
+
+	const blog = await Blog.findById(request.params.id)
+
+	if (blog === null) {
+		response.status(400).json(
+			{
+				error: 'ID doesnt exist'
+			}
+		)
+	}
+
+	const addNewComments = {
+		comments: blog.comments.concat(body.comments)
+	}
+
+	const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, addNewComments, { new: true })
+	response.json(updatedBlog);
+})
+
 
 module.exports = blogsRouter

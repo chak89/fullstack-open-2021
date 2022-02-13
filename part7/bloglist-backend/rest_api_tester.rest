@@ -3,8 +3,27 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplZmYiLCJpZCI6IjYxYzA4YjljZTA0ZjI1MjE0NDBhZTRiOSIsImlhdCI6MTY0MDc5NzU0Mn0.WMa6In1pIDiPKOKHyq-ljWCqODO3WNzQxQOTJlpTBbE
 
 {
-	"title": "Bearer Token",
-	"author": "Authorized",
-	"url": "NONE",
-	"likes": 1111
+	"title": "Bearer1 Token",
+	"author": "Authorized1",
+	"url": "NONE1",
+	"likes": 1
 }
+
+
+# PUT http://localhost:3003/api/blogs/6208708b41c5733e385cf37f
+# Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplZmYiLCJpZCI6IjYxYzA4YjljZTA0ZjI1MjE0NDBhZTRiOSIsImlhdCI6MTY0MDc5NzU0Mn0.WMa6In1pIDiPKOKHyq-ljWCqODO3WNzQxQOTJlpTBbE
+
+# {
+# 	"title": "Bearer12 Token",
+#   "author": "Authorized12",
+#   "url": "NONE12",
+#   "likes": 12,
+# 	"comments": "lol"
+# }
+
+
+
+# DELETE http://localhost:3003/api/blogs/6208733741c5733e385cf3c2
+# Content-Type: application/json
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkplZmYiLCJpZCI6IjYxYzA4YjljZTA0ZjI1MjE0NDBhZTRiOSIsImlhdCI6MTY0MDc5NzU0Mn0.WMa6In1pIDiPKOKHyq-ljWCqODO3WNzQxQOTJlpTBbE
