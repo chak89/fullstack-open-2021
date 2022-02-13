@@ -37,6 +37,7 @@ export const userLogin = (credentials) => {
 
 export const setUser = (user) => {
 	return async dispatch => {
+		blogService.setToken(user.token)
 		dispatch({
 			type: 'SET_USER',
 			data: user

@@ -46,6 +46,7 @@ const App = () => {
 			<div>
 				<Notification />
 				<Routes>
+					<Route path='/blogs/*' element={<LoggedInUser />} />
 					<Route path='/users/*' element={<LoggedInUser />} />
 					<Route path='/' element={<Home />} />
 				</Routes>

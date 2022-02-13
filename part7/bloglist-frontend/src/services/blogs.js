@@ -20,6 +20,7 @@ const create = async (newBLog) => {
 		headers: { Authorization: token }
 	}
 
+	console.log('blogs.js -> create() -> config', config)
 	console.log('blogs.js -> create() -> newBLog', newBLog)
 	const response = await axios.post(baseUrl, newBLog, config)
 	return response.data
@@ -35,7 +36,7 @@ const update = async (updateBlog, blogId) => {
 	return response.data
 }
 
-const remove = async(blogId) => {
+const remove = async (blogId) => {
 	const config = {
 		headers: { Authorization: token }
 	}

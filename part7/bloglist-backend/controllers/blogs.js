@@ -16,6 +16,7 @@ blogsRouter.get('/', async (request, response) => {
 
 //Post a blog
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
+	logger.info('blogs.js -> blogsRouter.post')
 	const reqBody = request.body
 
 	const newBlog =
@@ -31,7 +32,8 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 	const savedBlog = await blog.save()
 
 	request.user.blogs = request.user.blogs.concat(savedBlog.id)
-	logger.info('blogsRouter.post -> request.user:',request.user)
+	logger.info('blogsRouter.post -> request.user:', request.user)
+	logger.info('blogsRouter.post -> savedBlog: ', savedBlog)
 
 	await request.user.save()
 	response.status(201).json(savedBlog)
@@ -39,7 +41,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 
 //Delete a blog by id
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
-
+logger.info('blogs.js -> blogsRouter.delete')
 	const blog = await Blog.findById(request.params.id)
 
 	if (blog === null) {
@@ -54,6 +56,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
 		const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
 		request.user.blogs = request.user.blogs.filter(val => (val != request.params.id))
 		await request.user.save()
+		logger.info('blogs.js -> deletedBlog:', deletedBlog)
 		response.json(deletedBlog)
 
 	} else {
