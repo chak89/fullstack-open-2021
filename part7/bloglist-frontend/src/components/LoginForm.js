@@ -5,6 +5,11 @@ import { userLogin } from '../reducers/userReducer'
 import {
 	useNavigate
 } from 'react-router-dom'
+
+import {
+	Button,
+	TextField
+} from '@mui/material'
 //import PropTypes from 'prop-types'
 
 const LoginForm = () => {
@@ -17,6 +22,9 @@ const LoginForm = () => {
 
 	const handleLogin = async (event) => {
 		event.preventDefault()
+
+		console.log('username.value:', username.value)
+		console.log('password.value:', password.value)
 
 		dispatch(userLogin({
 			'username': username.value,
@@ -33,14 +41,12 @@ const LoginForm = () => {
 			<div>
 				<form onSubmit={handleLogin}>
 					<div>
-						username
-						<input name="Username" {...username} />
+						<TextField id="filled-basic" label="Username" variant="filled" name="Username" {...username} />
 					</div>
 					<div>
-						password
-						<input name="Password" {...password} />
+						<TextField id="outlined-password-input" label="Password" type="password" variant="filled" name="Password" {...password} />
 					</div>
-					<button id='login-button' type="submit">login</button>
+					<Button variant="contained" id='login-button' type="submit">login</Button>
 				</form>
 			</div>
 		)

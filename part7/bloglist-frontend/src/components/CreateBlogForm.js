@@ -3,6 +3,11 @@ import { useDispatch } from 'react-redux'
 import { useField } from '../hooks/index'
 import { createBlog } from '../reducers/blogReducer'
 
+import {
+	Button,
+	TextField
+} from '@mui/material'
+
 //"Paranthesis" to return an object.
 const CreateBlogForm = ({ createBlogFormRef }) => {
 	const { reset: resetTitle, ...title } = useField('formTitle', 'text')
@@ -38,18 +43,15 @@ const CreateBlogForm = ({ createBlogFormRef }) => {
 			<h2>Create a new blog</h2>
 			<form onSubmit={addBlog}>
 				<div>
-					title:
-					<input name='title' {...title} />
+					<TextField id="filled-basic" label="Title" variant="filled" name='title' {...title} />
 				</div>
 				<div>
-					author:
-					<input name='author' {...author} />
+					<TextField id="filled-basic" label="Author" variant="filled" name='author' {...author} />
 				</div>
 				<div>
-					url:
-					<input name='linkurl' {...linkurl} />
+					<TextField id="filled-basic" label="Url" variant="filled" name='linkurl' {...linkurl} />
 				</div>
-				<button id='createBlog' type='submit'>create</button>
+				<Button variant="contained" id='createBlog' type="submit">Create</Button>
 			</form>
 		</div>
 	)

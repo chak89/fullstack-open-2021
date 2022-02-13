@@ -1,8 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+
 import {
 	Link
 } from 'react-router-dom'
+
+import {
+	Paper,
+	Stack,
+	styled
+} from '@mui/material'
 
 const BlogList = () => {
 	const blogs = useSelector(state => state.blog)
@@ -11,27 +18,29 @@ const BlogList = () => {
 		return null
 	}
 
-	const blogStyle = {
-		paddingTop: 10,
-		paddingLeft: 2,
-		border: 'solid',
-		borderWidth: 1,
-		marginBottom: 5
-	}
+	const Item = styled(Paper)(({ theme }) => ({
+		backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+		...theme.typography.body2,
+		padding: theme.spacing(1),
+		textAlign: 'left',
+		color: theme.palette.text.secondary,
+	}))
 
 	return (
 		<div>
 			<h2>All blogs</h2>
-			{blogs
-				.sort((a, b) => {
-					return b.likes - a.likes
-				})
-				.map((blog) =>
-					<div style={blogStyle} key={blog.id}>
-						<Link to={`/blogs/${blog.id}`}><strong>{blog.title} {blog.author}</strong></Link>
-					</div>
-				)
-			}
+			<Stack spacing={2}>
+				{blogs
+					.sort((a, b) => {
+						return b.likes - a.likes
+					})
+					.map((blog) =>
+						<Item key={blog.id}>
+							<Link to={`/blogs/${blog.id}`}><strong>{blog.title} {blog.author}</strong></Link>
+						</Item>
+					)
+				}
+			</Stack>
 		</div>
 	)
 }

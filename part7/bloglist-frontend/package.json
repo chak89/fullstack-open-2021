@@ -4,6 +4,10 @@
   "private": true,
   "author": "Chak Tang",
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@material-ui/core": "^4.12.3",
+    "@mui/material": "^5.4.1",
     "@testing-library/user-event": "^12.6.3",
     "axios": "^0.21.1",
     "prop-types": "^15.8.1",

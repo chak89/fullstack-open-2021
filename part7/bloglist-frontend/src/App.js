@@ -15,6 +15,8 @@ import Notification from './components/Notification'
 import LoggedInUser from './components/LoggedInUser'
 import Home from './components/Home'
 import './App.css'
+import Container from '@material-ui/core/Container'
+
 
 
 const App = () => {
@@ -42,16 +44,18 @@ const App = () => {
 	}, [])
 
 	return (
-		<Router>
-			<div>
-				<Notification />
-				<Routes>
-					<Route path='/blogs/*' element={<LoggedInUser />} />
-					<Route path='/users/*' element={<LoggedInUser />} />
-					<Route path='/' element={<Home />} />
-				</Routes>
-			</div>
-		</Router >
+		<Container>
+			<Router>
+				<div>
+					<Notification />
+					<Routes>
+						<Route path='/blogs/*' element={<LoggedInUser />} />
+						<Route path='/users/*' element={<LoggedInUser />} />
+						<Route path='/' element={<Home />} />
+					</Routes>
+				</div>
+			</Router >
+		</Container>
 	)
 }
 
