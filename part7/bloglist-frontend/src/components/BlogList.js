@@ -1,23 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import {
-	Link,
-	useParams
+	Link
 } from 'react-router-dom'
 
-const DisplayUserBlogList = () => {
-	const userList = useSelector(state => state.userList)
+const BlogList = () => {
 	const blogs = useSelector(state => state.blog)
-	const { id } = useParams()
 
-	if (!userList) {
+	if (!blogs) {
 		return null
 	}
-
-	//IIFE
-	const selectedUser = (() => {
-		return userList.find(user => user.id === id)
-	})()
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -29,10 +21,8 @@ const DisplayUserBlogList = () => {
 
 	return (
 		<div>
-			<h2>{selectedUser.name}</h2>
-			<h3>Added blogs:</h3>
+			<h2>All blogs</h2>
 			{blogs
-				.filter((blog) => (blog.user?.username === selectedUser.username) || (blog?.user === selectedUser.id))
 				.sort((a, b) => {
 					return b.likes - a.likes
 				})
@@ -46,4 +36,4 @@ const DisplayUserBlogList = () => {
 	)
 }
 
-export default DisplayUserBlogList
+export default BlogList
