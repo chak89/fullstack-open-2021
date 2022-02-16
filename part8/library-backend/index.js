@@ -112,6 +112,10 @@ const typeDefs = gql`
 			published: Int!
 			genres: [String]!
 		): Books
+		editAuthor(
+			name: String!
+			setBornTo: Int!
+		): Authors
 	}
 
   type Query {
@@ -153,16 +157,16 @@ const resolvers = {
 	//Save book to the server, if the author is not yet saved to the server, a new author is added to the system. 
 	Mutation: {
 		addBook: (root, args) => {
-			console.log('Mutation -> addBook')
-			const authorNameExists = authors.find(a => a.name === args.author)
+			console.log('Mutation -> addBook()')
+			const foundAuthor = authors.find(a => a.name === args.author)
 
-			if(!authorNameExists) {
+			if (!foundAuthor) {
 				console.log(`Author ${args.author} doesnt exist in the system`)
 				const author = {
 					name: args.author,
 					id: uuid()
 				}
-				
+
 				authors = authors.concat(author)
 				console.log(`Added author: ${JSON.stringify(author)} to the system`)
 			}
@@ -171,6 +175,20 @@ const resolvers = {
 			books = books.concat(book)
 			console.log(`Added book: ${JSON.stringify(book)} to the system\n`)
 			return book
+		},
+		editAuthor: (root, args) => {
+			console.log('Mutation -> editAuthor()')
+			const foundAuthor = authors.find(a => a.name === args.name)
+
+			if (!foundAuthor) {
+				console.log(`Author ${args.name} doesnt exist in the system`)
+				return null
+			}
+
+			const updatedAuthor = { ...foundAuthor, born: args.setBornTo }
+			authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
+			console.log(`Updated author to: ${JSON.stringify(updatedAuthor)} in the system\n`)
+			return updatedAuthor
 		}
 	}
 }
