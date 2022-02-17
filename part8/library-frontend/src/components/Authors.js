@@ -3,10 +3,9 @@ import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, SET_AUTHOR_BIRTHYEAR } from '../queries'
 
 const Authors = (props) => {
-	const [name, setName] = useState('')
 	const [born, setBorn] = useState('')
+	const [name, setName] = useState('')
 
-	
 	//Updating the cache: use the useMutation hook's refetchQueries parameter to define that the query fetching all authors to be done again after setAuthorBirthyear
 	const [setAuthorBirthyear] = useMutation(SET_AUTHOR_BIRTHYEAR, {
 		refetchQueries: [{ query: ALL_AUTHORS }]
@@ -16,7 +15,11 @@ const Authors = (props) => {
 		return null
 	}
 
-	const submit = async (event) => {
+	const handleChange = (event) => {
+		setName(event.target.value)
+	}
+
+	const submitSetBirthyear = async (event) => {
 		event.preventDefault()
 		//Mutations that uses varaibles
 		setAuthorBirthyear({ variables: { name, born } })
@@ -24,6 +27,8 @@ const Authors = (props) => {
 		setName('')
 		setBorn('')
 	}
+
+	console.log('props.authors:', props.authors)
 
 	return (
 		<div>
@@ -50,13 +55,14 @@ const Authors = (props) => {
 			</table>
 			<div>
 				<h2>Set birthyear</h2>
-				<form onSubmit={submit}>
+				<form onSubmit={submitSetBirthyear}>
 					<div>
 						name:
-						<input
-							value={name}
-							onChange={(event) => setName(event.target.value)}
-						/>
+						<select value={name} onChange={handleChange}>
+							{props.authors.map(a =>
+								<option key={a.name} value={a.name}>{a.name}</option>
+							)}
+						</select>
 					</div>
 					<div>
 						born:
