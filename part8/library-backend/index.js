@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const config = require('./utils/config')
 const mongoose = require('mongoose')
@@ -21,24 +21,24 @@ mongoose.connect(config.MONGODB_URI)
 	})
 
 const saveToDB = async () => {
-/*
-	 	await Author.deleteMany({})
-		await Book.deleteMany({})
-	
- 		console.log('Saving authors to database:')
-		authors.forEach(async (a) => {
-			await new Author(a).save()
-		})
-		console.log('Saved authors to database:') 
-	
-		console.log('Initialised books:')
-		console.log('Saving authors to database:')
-	
-		books.forEach(async (b) => {
-			await new Book(b).save()
-		})
-		console.log('Saved books to database:') 
-		*/
+	/*
+				await Author.deleteMany({})
+			await Book.deleteMany({})
+		
+				console.log('Saving authors to database:')
+			authors.forEach(async (a) => {
+				await new Author(a).save()
+			})
+			console.log('Saved authors to database:') 
+		
+			console.log('Initialised books:')
+			console.log('Saving authors to database:')
+		
+			books.forEach(async (b) => {
+				await new Book(b).save()
+			})
+			console.log('Saved books to database:') 
+			*/
 }
 
 const typeDefs = gql`
@@ -89,13 +89,13 @@ const resolvers = {
 				return await Book.find()
 			}
 
-			if(args.author) {
+			if (args.author) {
 				console.log('allBooks with the parameter author doesnt work')
 				return null
 			}
 
 			if (args.genre) {
-				return await Book.find({ genres: { $in: [args.genre]} })
+				return await Book.find({ genres: { $in: [args.genre] } })
 			}
 		},
 		allAuthors: async () => await Author.find()
@@ -123,16 +123,34 @@ const resolvers = {
 					name: args.author,
 				}
 
-				foundAuthor = await new Author(author).save()
-				console.log(`Added author: ${JSON.stringify(author)} to the database`)
-				console.log(`Fetched author: ${foundAuthor} from the database`)
+				try {
+					foundAuthor = await new Author(author).save()
+					console.log(`Added author: ${JSON.stringify(author)} to the database`)
+					console.log(`Fetched author: ${foundAuthor} from the database`)
+				} catch (error) {
+					console.log(error.message)
+					throw new UserInputError(error.message, {
+						invalidArgs: args,
+					})
+				}
 			} else {
 				console.log('Found author in database: ', foundAuthor)
 			}
 
 			const book = new Book({ ...args, author: foundAuthor._id })
-			console.log(`Adding book: ${JSON.stringify(book)} to the database\n`)
-			return book.save()
+			let addedBook
+			try {
+				console.log(`Adding book: ${JSON.stringify(book)} to the database\n`)
+				addedBook = await book.save()
+				console.group('addedBook to database')
+			} catch (error) {
+				console.log(error.message)
+				throw new UserInputError(error.message, {
+					invalidArgs: args,
+				})
+			}
+
+			return addedBook
 		},
 		// Update the birthyear of the author
 		editAuthor: async (root, args) => {
