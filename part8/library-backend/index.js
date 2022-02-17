@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const Author = require('./models/Author')
 const Book = require('./models/Book')
 
-let { authors, books } = require('./utils/initList')
+//let { authors, books } = require('./utils/initList')
 
 console.log('connecting to', config.MONGODB_URI)
 
@@ -21,15 +21,15 @@ mongoose.connect(config.MONGODB_URI)
 	})
 
 const saveToDB = async () => {
-
-	/* 	await Author.deleteMany({})
+/*
+	 	await Author.deleteMany({})
 		await Book.deleteMany({})
 	
-		console.log('Saving authors to database:')
+ 		console.log('Saving authors to database:')
 		authors.forEach(async (a) => {
 			await new Author(a).save()
 		})
-		console.log('Saved authors to database:')
+		console.log('Saved authors to database:') 
 	
 		console.log('Initialised books:')
 		console.log('Saving authors to database:')
@@ -37,9 +37,9 @@ const saveToDB = async () => {
 		books.forEach(async (b) => {
 			await new Book(b).save()
 		})
-		console.log('Saved books to database:') */
+		console.log('Saved books to database:') 
+		*/
 }
-
 
 const typeDefs = gql`
 	type Book {
@@ -80,31 +80,32 @@ const typeDefs = gql`
 
 const resolvers = {
 	Query: {
-		bookCount: () => books.length,
-		authorCount: () => authors.length,
-		allBooks: (root, args) => {
+		bookCount: async () => await Book.collection.countDocuments(),
+		authorCount: async () => await Author.collection.countDocuments(),
+		allBooks: async (root, args) => {
 
 			//If both optional parameters are null
 			if (!args.author && !args.genre) {
-				return books
+				return await Book.find()
 			}
 
-			let filteredBooks = books
-
-			if (args.author) {
-				filteredBooks = filteredBooks.filter(b => b.author === args.author)
+			if(args.author) {
+				console.log('allBooks with the parameter author doesnt work')
+				return null
 			}
 
 			if (args.genre) {
-				filteredBooks = filteredBooks.filter(b => b.genres.includes(args.genre))
+				return await Book.find({ genres: { $in: [args.genre]} })
 			}
-
-			return filteredBooks
 		},
-		allAuthors: () => authors
+		allAuthors: async () => await Author.find()
 	},
 	Author: {
-		bookCount: (root) => books.filter(b => b.author === root.name).length
+		//Get current Author _id and match against Books
+		bookCount: async (root) => {
+			const matchedBook = await Book.find({ author: { $in: root._id } })
+			return matchedBook.length
+		}
 	},
 	Book: {
 		author: async (root) => await Author.findById(root.author)
