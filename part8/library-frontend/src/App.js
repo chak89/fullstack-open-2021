@@ -15,8 +15,7 @@ const App = () => {
 
 	const resultAuthors = useQuery(ALL_AUTHORS)
 	const resultBooks = useQuery(ALL_BOOKS)
-	console.log('resultAuthors:', resultAuthors)
-	console.log('resultBooks:', resultBooks)
+
 
 	useEffect(() => {
 		const tokenInCache = localStorage.getItem('LoggedInUser')
@@ -27,6 +26,14 @@ const App = () => {
 
 	if (resultAuthors.loading || resultBooks.loading) {
 		return <div>loading......</div>
+	}
+
+	if(!resultAuthors.loading) {
+		console.log('resultAuthors:', resultAuthors)
+	}
+
+	if(!resultBooks.loading) {
+		console.log('resultBooks:', resultBooks)
 	}
 
 	const loggedInView = () => {

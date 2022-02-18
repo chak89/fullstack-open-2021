@@ -17,6 +17,7 @@ query AllBooks {
 			name
 		}
     published
+		genres
   }
 }
 `
