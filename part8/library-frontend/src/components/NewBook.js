@@ -41,21 +41,21 @@ const NewBook = (props) => {
 		<div>
 			<form onSubmit={submit}>
 				<div>
-					title
+					title:
 					<input
 						value={title}
 						onChange={({ target }) => setTitle(target.value)}
 					/>
 				</div>
 				<div>
-					author
+					author:
 					<input
 						value={author}
 						onChange={({ target }) => setAuthor(target.value)}
 					/>
 				</div>
 				<div>
-					published
+					published: 
 					<input
 						type='number'
 						value={published}
