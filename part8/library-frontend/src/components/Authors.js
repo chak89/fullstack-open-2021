@@ -4,7 +4,8 @@ import { ALL_AUTHORS, SET_AUTHOR_BIRTHYEAR } from '../queries'
 
 const Authors = (props) => {
 	const [born, setBorn] = useState('')
-	const [name, setName] = useState('')
+	//Set the selected to the first element in list when the component is created instead so Select works when add default value
+	const [name, setName] = useState(props.authors[0].name)
 
 	//Updating the cache: use the useMutation hook's refetchQueries parameter to define that the query fetching all authors to be done again after setAuthorBirthyear
 	const [setAuthorBirthyear] = useMutation(SET_AUTHOR_BIRTHYEAR, {
@@ -22,6 +23,8 @@ const Authors = (props) => {
 	const submitSetBirthyear = async (event) => {
 		event.preventDefault()
 		//Mutations that uses varaibles
+		console.log('UPDATED AUTHOR:')
+		console.log(`name: ${name} - born: ${born}`)
 		setAuthorBirthyear({ variables: { name, born } })
 		console.log('updated author...')
 		setName('')

@@ -7,40 +7,44 @@ import NewBook from './components/NewBook'
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS } from './queries'
 import Login from './components/Login'
+import Recommended from './components/Recommended'
 
 const App = () => {
 	const [page, setPage] = useState('')
 	const [token, setToken] = useState(null)
 	const client = useApolloClient()
 
+	//useQuery called during render
 	const resultAuthors = useQuery(ALL_AUTHORS)
 	const resultBooks = useQuery(ALL_BOOKS)
 
 
+
 	useEffect(() => {
 		const tokenInCache = localStorage.getItem('LoggedInUser')
-    if (tokenInCache) {
-      setToken(tokenInCache)
-    }
-	})
+		if (tokenInCache) {
+			setToken(tokenInCache)
+		}
+	}, [])
 
 	if (resultAuthors.loading || resultBooks.loading) {
 		return <div>loading......</div>
 	}
 
-	if(!resultAuthors.loading) {
+	if (!resultAuthors.loading) {
 		console.log('resultAuthors:', resultAuthors)
 	}
 
-	if(!resultBooks.loading) {
+	if (!resultBooks.loading) {
 		console.log('resultBooks:', resultBooks)
 	}
 
 	const loggedInView = () => {
 		return (
 			<>
-				<button onClick={() => setPage('add')}>add book</button>
-				<button onClick={logout}>logout</button>
+				<button onClick={() => setPage('add')}>Add book</button>
+				<button onClick={() => setPage('recommended')}>Recommended</button>
+				<button onClick={logout}>Logout</button>
 			</>
 		)
 	}
@@ -55,13 +59,13 @@ const App = () => {
 	return (
 		<div>
 			<div>
-				<button onClick={() => setPage('authors')}>authors</button>
-				<button onClick={() => setPage('books')}>books</button>
-				{token === null 
-				?
-				<button onClick={() => setPage('login')}>login</button>
-				:
-				loggedInView()
+				<button onClick={() => setPage('authors')}>Authors</button>
+				<button onClick={() => setPage('books')}>Books</button>
+				{token === null
+					?
+					<button onClick={() => setPage('login')}>Login</button>
+					:
+					loggedInView()
 				}
 			</div>
 
@@ -75,6 +79,11 @@ const App = () => {
 
 			<NewBook
 				show={page === 'add'}
+			/>
+
+			<Recommended
+				show={page === 'recommended'}
+				books={resultBooks.data.allBooks}
 			/>
 
 			<Login

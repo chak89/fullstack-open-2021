@@ -22,7 +22,7 @@ const Login = ({ show, setToken, setPage }) => {
 			localStorage.setItem('LoggedInUser', token)
 			setPage('')
 		}
-	}, [result.data])
+	}, [result.data]) // eslint-disable-line
 
 	if (!show) {
 		return null

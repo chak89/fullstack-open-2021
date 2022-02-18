@@ -123,6 +123,7 @@ const resolvers = {
 		},
 		allAuthors: async () => await Author.find(),
 		me: (root, args, context) => {
+			console.log('Query -> me: -> context.currentUser:', context.currentUser)
 			return context.currentUser
 		}
 	},
@@ -134,7 +135,7 @@ const resolvers = {
 			return matchedBook.length
 		}
 	},
-	Book: { 
+	Book: {
 		//Book author must exist, otherwise null will be returned
 		author: async (root) => await Author.findById(root.author)
 	},
