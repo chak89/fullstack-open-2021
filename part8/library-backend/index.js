@@ -134,7 +134,8 @@ const resolvers = {
 			return matchedBook.length
 		}
 	},
-	Book: {
+	Book: { 
+		//Book author must exist, otherwise null will be returned
 		author: async (root) => await Author.findById(root.author)
 	},
 	/* ------------------------------- Mutations ------------------------------ */
