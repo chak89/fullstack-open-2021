@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery, useLazyQuery } from '@apollo/client'
 import { ME, FAVORITE_BOOKS } from '../queries'
 
 const Recommended = (props) => {
+
 	const loadCurrentUser = useQuery(ME, {
 		skip: props.token === null
 	})
 
-	//useLazyQuery provides a function to call at will
-	const [loadFavoriteGenre, favoriteGenre] = useLazyQuery(FAVORITE_BOOKS)
+	const favoriteBooks = useQuery(FAVORITE_BOOKS, {
+		skip: !loadCurrentUser.data,
+		variables: { favoriteGenre: loadCurrentUser.data ? loadCurrentUser.data.me.favoriteGenre : '' }
+	})
 
 	if (!props.show) {
 		return null
@@ -19,16 +22,14 @@ const Recommended = (props) => {
 		console.log('loadCurrentUser.data:', loadCurrentUser.data)
 	}
 
-	if (!favoriteGenre.called) {
-		loadFavoriteGenre({ variables: { favoriteGenre: loadCurrentUser.data.me.favoriteGenre } })
-		return <div>Loading favorite books</div>
-	}
-
-	if (!favoriteGenre.data) {
+	if (!favoriteBooks.data) {
 		return <div>Waiting for favorite books</div>
 	}
 
-	console.log('loadCurrentUser() -> favoriteGenre.data.allBooks:', favoriteGenre.data.allBooks)
+	//Refetch 
+	favoriteBooks.refetch()
+	console.log('Recommended.js -> favoriteBooks.refetch()')
+	console.log('Recommended.js -> favoriteBooks.data.allBooks:', favoriteBooks.data.allBooks)
 
 		return (
 			<div>
@@ -45,7 +46,7 @@ const Recommended = (props) => {
 								published
 							</th>
 						</tr>
-						{favoriteGenre.data.allBooks
+						{favoriteBooks.data.allBooks
 							.map(a =>
 								<tr key={a.title}>
 									<td>{a.title}</td>

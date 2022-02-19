@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
 import { FAVORITE_BOOKS } from '../queries'
 
 const Books = (props) => {
-
+	console.log('Books -> props.books:', props.books)
 	const [genre, setGenre] = useState('')
 
 	const loadBooks = useQuery(FAVORITE_BOOKS, {
-		variables: { favoriteGenre: genre }
+		variables: { favoriteGenre: genre },
 	})
 
 	if (!props.show) {
@@ -29,6 +29,9 @@ const Books = (props) => {
 		uniqueGenres = new Set(uniqueGenres.flat())
 		return Array.from(uniqueGenres).map((g) => <button key={g} onClick={() => setGenre(g)}>{g}</button>)
 	}
+
+	console.log('loadBooks.refetch()')
+	loadBooks.refetch()
 
 	return (
 		<div>
@@ -56,9 +59,7 @@ const Books = (props) => {
 					}
 				</tbody>
 			</table>
-			{
-				renderGenres()
-			}
+			{renderGenres()}
 		</div>
 	)
 }

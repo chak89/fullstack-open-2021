@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
+import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK, FAVORITE_BOOKS } from '../queries'
 
 const NewBook = (props) => {
 	const [title, setTitle] = useState('')
@@ -55,7 +55,7 @@ const NewBook = (props) => {
 					/>
 				</div>
 				<div>
-					published: 
+					published:
 					<input
 						type='number'
 						value={published}
