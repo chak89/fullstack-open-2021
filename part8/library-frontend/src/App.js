@@ -53,7 +53,8 @@ const App = () => {
 		setToken(null)
 		localStorage.clear()
 		client.resetStore()
-		setPage('login')
+		console.log('User logged out')
+		window.location.reload()
 	}
 
 	return (
@@ -83,6 +84,7 @@ const App = () => {
 
 			<Recommended
 				show={page === 'recommended'}
+				token={token}
 				books={resultBooks.data.allBooks}
 			/>
 

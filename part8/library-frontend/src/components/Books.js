@@ -1,11 +1,25 @@
 import React, { useState } from 'react'
+import { useQuery, useLazyQuery } from '@apollo/client'
+import { FAVORITE_BOOKS } from '../queries'
 
 const Books = (props) => {
 
 	const [genre, setGenre] = useState('')
 
+	const loadBooks = useQuery(FAVORITE_BOOKS, {
+		variables: { favoriteGenre: genre }
+	})
+
 	if (!props.show) {
 		return null
+	}
+
+	if (!loadBooks.loading) {
+		console.log('loadBooks.data:', loadBooks.data)
+	}
+
+	if (!loadBooks.data) {
+		return <div>Loading for books from server</div>
 	}
 
 	//Flatten inner arrays and place into Set to get unique genres
@@ -31,12 +45,7 @@ const Books = (props) => {
 							published
 						</th>
 					</tr>
-					{props.books.filter(a => {
-						if (genre === '') {
-							return true
-						}
-						return a.genres.includes(genre)
-					})
+					{loadBooks.data.allBooks
 						.map(a =>
 							<tr key={a.title}>
 								<td>{a.title}</td>

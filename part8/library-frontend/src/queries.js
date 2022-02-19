@@ -70,3 +70,18 @@ query Me {
   }
 }
 `
+
+export const FAVORITE_BOOKS = gql`
+query favoriteBooks($favoriteGenre: String!) {
+  allBooks(
+		genre: $favoriteGenre
+	) {
+    title
+    author {
+			name
+		}
+    published
+		genres
+  }
+}
+`
