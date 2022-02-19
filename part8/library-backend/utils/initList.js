@@ -88,7 +88,28 @@ let books = [
 ]
 
 
+const saveToDB = async () => {
+	await Author.deleteMany({})
+	await Book.deleteMany({})
+
+	console.log('Saving authors to database:')
+	authors.forEach(async (a) => {
+		await new Author(a).save()
+	})
+	console.log('Saved authors to database:')
+
+	console.log('Initialised books:')
+	console.log('Saving authors to database:')
+
+	books.forEach(async (b) => {
+		await new Book(b).save()
+	})
+	console.log('Saved books to database:')
+
+}
+
 module.exports = {
 	authors,
-	books
+	books,
+	saveToDB
 }
