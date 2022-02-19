@@ -17,16 +17,23 @@ const App = () => {
 	const resultAuthors = useQuery(ALL_AUTHORS)
 	const resultBooks = useQuery(ALL_BOOKS)
 
+	console.log('CACHE:', client.cache.data.data)
 
 	useSubscription(BOOK_ADDED, {
 		onSubscriptionData: ({ subscriptionData }) => {
 			console.log('subscriptionData:', subscriptionData)
-			let book = subscriptionData.data.bookAdded
-			let text = `New book added!\nTitle: ${book.title}\nAuthor: ${book.author.name}\nPublished: ${book.published}\nGenres ${book.genres}`
-			window.alert(text)
+			let bookAdded = subscriptionData.data.bookAdded
+			window.alert(JSON.stringify(bookAdded, null, 1))
+			
+			//When details of new book is received, add to the Apollo cache, so its rendered to the screen
+			client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+				return {
+					allBooks: allBooks.concat(bookAdded),
+				}
+			})
+			console.log('useSubscription() -> CACHE:', client.cache.data.data)
 		}
 	})
-
 
 	useEffect(() => {
 		const tokenInCache = localStorage.getItem('LoggedInUser')
