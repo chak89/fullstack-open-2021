@@ -5,7 +5,7 @@ import { ALL_AUTHORS, SET_AUTHOR_BIRTHYEAR } from '../queries'
 const Authors = (props) => {
 	const [born, setBorn] = useState('')
 	//Set the selected to the first element in list when the component is created instead so Select works when add default value
-	const [name, setName] = useState(props.authors[0].name)
+	const [name, setName] = useState(props.authors.length ? props.authors[0].name : '')
 
 	//Updating the cache: use the useMutation hook's refetchQueries parameter to define that the query fetching all authors to be done again after setAuthorBirthyear
 	const [setAuthorBirthyear] = useMutation(SET_AUTHOR_BIRTHYEAR, {

@@ -1,3 +1,5 @@
+const Author = require('../models/Author')
+const Book = require('../models/Book')
 
 let authors = [
 	{
@@ -92,7 +94,7 @@ const saveToDB = async () => {
 	await Author.deleteMany({})
 	await Book.deleteMany({})
 
-	console.log('Saving authors to database:')
+/* 	console.log('Saving authors to database:')
 	authors.forEach(async (a) => {
 		await new Author(a).save()
 	})
@@ -104,7 +106,7 @@ const saveToDB = async () => {
 	books.forEach(async (b) => {
 		await new Book(b).save()
 	})
-	console.log('Saved books to database:')
+	console.log('Saved books to database:') */
 
 }
 

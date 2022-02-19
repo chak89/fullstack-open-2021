@@ -38,10 +38,7 @@ const resolvers = {
 	/* ---------------------- Custom resolver fields -------------------------- */
 	Author: {
 		//Get current Author _id and match against Books
-		bookCount: async (root) => {
-			const matchedBook = await Book.find({ author: { $in: root._id } })
-			return matchedBook.length
-		}
+		bookCount: async (root) => root.books.length
 	},
 	Book: {
 		//Book author must exist, otherwise null will be returned
@@ -60,43 +57,32 @@ const resolvers = {
 				throw new AuthenticationError('not authenticated')
 			}
 
-			let foundAuthor = await Author.findOne({ name: args.author })
+			let author = await Author.findOne({ name: args.author })
+			let book = new Book({ ...args })
 
-			if (!foundAuthor) {
+			//If author doesn't exist, create author
+			if (!author) {
 				console.log(`Author ${args.author} doesnt exist in the database`)
-				const author = {
-					name: args.author,
-				}
-
-				try {
-					foundAuthor = await new Author(author).save()
-					console.log(`Added author: ${JSON.stringify(author)} to the database`)
-					console.log(`Fetched author: ${foundAuthor} from the database`)
-				} catch (error) {
-					console.log(error.message)
-					throw new UserInputError(error.message, {
-						invalidArgs: args,
-					})
-				}
+				author = new Author({ name: args.author, books: [book._id] })
 			} else {
-				console.log('Found author in database: ', foundAuthor)
+				console.log(`Author ${args.author} exist in the database`)
+				author.books = author.books.concat(book._id)
 			}
 
-			const book = new Book({ ...args, author: foundAuthor._id })
 			let addedBook
+			//Saving author and books to database
 			try {
-				console.log(`Adding book: ${JSON.stringify(book)} to the database\n`)
+				await author.save()
+				book.author = author._id
 				addedBook = await book.save()
-				console.group('addedBook to database')
+
 			} catch (error) {
 				console.log(error.message)
 				throw new UserInputError(error.message, {
 					invalidArgs: args,
 				})
 			}
-
 			pubsub.publish('BOOK_ADDED', { bookAdded: addedBook })
-
 			return addedBook
 		},
 		// Update the birthyear of the author
