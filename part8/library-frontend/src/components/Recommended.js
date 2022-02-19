@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import React from 'react'
+import { useQuery } from '@apollo/client'
 import { ME, FAVORITE_BOOKS } from '../queries'
 
 const Recommended = (props) => {

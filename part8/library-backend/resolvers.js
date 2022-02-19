@@ -158,7 +158,10 @@ const resolvers = {
 	},
 	Subscription: {
 		bookAdded: {
-			subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+			subscribe: () => {
+				console.log('Subscription -> bookAdded -> subscribe')
+				return pubsub.asyncIterator(['BOOK_ADDED'])
+			}
 		}
 	},
 }

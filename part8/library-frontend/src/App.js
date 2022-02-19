@@ -1,11 +1,10 @@
 
 import React, { useEffect, useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { useQuery } from '@apollo/client'
-import { ALL_AUTHORS, ALL_BOOKS } from './queries'
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from './queries'
 import Login from './components/Login'
 import Recommended from './components/Recommended'
 
@@ -18,6 +17,15 @@ const App = () => {
 	const resultAuthors = useQuery(ALL_AUTHORS)
 	const resultBooks = useQuery(ALL_BOOKS)
 
+
+	useSubscription(BOOK_ADDED, {
+		onSubscriptionData: ({ subscriptionData }) => {
+			console.log('subscriptionData:', subscriptionData)
+			let book = subscriptionData.data.bookAdded
+			let text = `New book added!\nTitle: ${book.title}\nAuthor: ${book.author.name}\nPublished: ${book.published}\nGenres ${book.genres}`
+			window.alert(text)
+		}
+	})
 
 
 	useEffect(() => {
