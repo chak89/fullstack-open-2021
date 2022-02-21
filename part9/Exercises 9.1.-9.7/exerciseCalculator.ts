@@ -17,9 +17,9 @@ const exerciseCalculator = (dailyExecise: number[], targetDaily: number): result
 		(previousValue, currentValue) =>
 			previousValue + currentValue
 	);
-	average = average / 7;
+	average = average / periodLength;
 
-	const success = target >= average ? true : false;
+	const success = average >= target ? true : false;
 
 	let rating;
 	let ratingDescription;
@@ -51,5 +51,6 @@ const exerciseCalculator = (dailyExecise: number[], targetDaily: number): result
 }
 
 
-const exerciseEachDay = [3, 0, 2, 4.5, 0, 3, 1];
-console.log(exerciseCalculator(exerciseEachDay, 2));
+const dailyExecise: number[] = process.argv.slice(3).map(i => Number(i))
+const targetDaily: number = Number(process.argv[2]);
+console.log(exerciseCalculator(dailyExecise, targetDaily));
