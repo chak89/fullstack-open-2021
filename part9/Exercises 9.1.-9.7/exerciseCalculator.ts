@@ -1,4 +1,4 @@
-interface result {
+export interface result {
 	periodLength: number;
 	trainingDays: number;
 	target: number;
@@ -51,6 +51,8 @@ const exerciseCalculator = (dailyExecise: number[], targetDaily: number): result
 };
 
 
-const dailyExecise: number[] = process.argv.slice(3).map(i => Number(i));
+/* const dailyExecise: number[] = process.argv.slice(3).map(i => Number(i));
 const targetDaily = Number(process.argv[2]);
-console.log(exerciseCalculator(dailyExecise, targetDaily));
+console.log(exerciseCalculator(dailyExecise, targetDaily)); */
+
+export default exerciseCalculator;
