@@ -1,7 +1,7 @@
 
 
-const calculateBmi = (height: number, weight: number): String => {
-	const bmi = weight / Math.pow((height/100),2)
+const calculateBmi = (height: number, weight: number): string => {
+	const bmi = weight / Math.pow((height/100),2);
 
 	switch (true) {
 		case (bmi < 18.5):
@@ -14,7 +14,8 @@ const calculateBmi = (height: number, weight: number): String => {
 		default:
 			return 'Out of range';
 	}
-}
+};
+
 /* 
 const height: number = Number(process.argv[2]);
 const weight: number = Number(process.argv[3]);

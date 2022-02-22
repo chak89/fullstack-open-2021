@@ -5,7 +5,7 @@ interface result {
 	average: number;
 	success: boolean;
 	rating: number;
-	ratingDescription: String;
+	ratingDescription: string;
 }
 
 const exerciseCalculator = (dailyExecise: number[], targetDaily: number): result => {
@@ -26,17 +26,17 @@ const exerciseCalculator = (dailyExecise: number[], targetDaily: number): result
 
 	if ((average / target) >= 1) {
 		rating = 3;
-		ratingDescription = 'Excellent, you reached your target'
+		ratingDescription = 'Excellent, you reached your target';
 
 	} else if ((average / target) >= 0.8) {
 		rating = 2;
-		ratingDescription = 'Not too bad but could be better'
+		ratingDescription = 'Not too bad but could be better';
 	} else if ((average / target) >= 0.4) {
 		rating = 1;
-		ratingDescription = 'You are not even halfway!'
+		ratingDescription = 'You are not even halfway!';
 	} else {
 		rating = 1;
-		ratingDescription = 'No hope for you!'
+		ratingDescription = 'No hope for you!';
 	}
 
 	return {
@@ -47,10 +47,10 @@ const exerciseCalculator = (dailyExecise: number[], targetDaily: number): result
 		success: success,
 		rating: rating,
 		ratingDescription: ratingDescription,
-	}
-}
+	};
+};
 
 
-const dailyExecise: number[] = process.argv.slice(3).map(i => Number(i))
-const targetDaily: number = Number(process.argv[2]);
+const dailyExecise: number[] = process.argv.slice(3).map(i => Number(i));
+const targetDaily = Number(process.argv[2]);
 console.log(exerciseCalculator(dailyExecise, targetDaily));
