@@ -1,10 +1,6 @@
+import CoursePart from "../types";
 
-interface totalProps {
-	name: string;
-	exerciseCount: number;
-}
-
-const Total = ({ courseParts }: { courseParts: totalProps[] }) => {
+const Total = ({ courseParts }: { courseParts: CoursePart[] }) => {
 	return (
 		<div>
 			<p>
