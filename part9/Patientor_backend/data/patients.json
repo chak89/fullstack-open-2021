@@ -54,5 +54,13 @@
 		"dateOfBirth": "1945-01-01",
 		"occupation": "Amazon Founder",
 		"gender": "male"
+	},
+	{
+		"id": "21c96780-9955-11ec-b2db-a5285aac4b43",
+		"name": "Hillary",
+		"dateOfBirth": "1941-01-01",
+		"ssn": "Clinton",
+		"gender": "female",
+		"occupation": "Vice minister"
 	}
 ]

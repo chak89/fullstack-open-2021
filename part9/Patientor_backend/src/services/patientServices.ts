@@ -1,14 +1,19 @@
-import patientData from '../../data/patients.json';
+import { patientEntries } from '../utils';
 
-import { NewPatientEntry, PatientNonSSN, Patient } from '../types';
+import {
+	NewPatientEntry,
+	PatientNonSSN,
+	PatientEntry,
+} from '../types';
+
 import { generateId, writeToJsonFile } from '../utils';
 
-const getEntries = (): Patient[] => {
-	return patientData;
+const getEntries = (): PatientEntry[] => {
+	return patientEntries();
 };
 
 const getNonSsnEntries = (): PatientNonSSN[] => {
-	return patientData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+	return patientEntries().map(({ id, name, dateOfBirth, gender, occupation }) => ({
 		id,
 		name,
 		dateOfBirth,
@@ -17,7 +22,7 @@ const getNonSsnEntries = (): PatientNonSSN[] => {
 	}));
 };
 
-const addPatient = (entry: NewPatientEntry): Patient => {
+const addPatient = (entry: NewPatientEntry): PatientEntry => {
 	const newPatientEntry = {
 		id: generateId(),
 		...entry
