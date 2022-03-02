@@ -4,6 +4,7 @@ import {
 	NewPatientEntry,
 	PatientNonSSN,
 	PatientEntry,
+	Patient
 } from '../types';
 
 import { generateId, writeToJsonFile } from '../utils';
@@ -20,6 +21,21 @@ const getNonSsnEntries = (): PatientNonSSN[] => {
 		gender,
 		occupation
 	}));
+};
+
+const getPatientEntryById = (id: string): Patient | undefined => {
+	const foundEntry = patientEntries().find(entry => entry.id === id);
+
+	if (!foundEntry) {
+		return undefined;
+	}
+
+	const formattedFoundEntry = {
+		...foundEntry,
+		entries: []
+	};
+
+	return formattedFoundEntry;
 };
 
 const addPatient = (entry: NewPatientEntry): PatientEntry => {
@@ -41,5 +57,6 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
 export default {
 	getEntries,
 	getNonSsnEntries,
-	addPatient
+	addPatient,
+	getPatientEntryById
 };

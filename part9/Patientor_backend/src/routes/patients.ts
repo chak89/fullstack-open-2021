@@ -25,4 +25,16 @@ router.post('/', (req, res) => {
 	}
 });
 
+router.get('/:id', (req, res) => {
+	console.log('id: ' + req.params.id);
+	const patientEntry = patientServices.getPatientEntryById(req.params.id);
+
+	if (!patientEntry) {
+		return res.status(404).send('Error: ID not found');
+	}
+
+	console.log('patientEntry:', patientEntry);
+	return res.send(patientEntry);
+});
+
 export default router;
