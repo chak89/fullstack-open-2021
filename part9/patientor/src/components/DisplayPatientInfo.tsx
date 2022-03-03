@@ -2,17 +2,22 @@ import React from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { setPatientInfo, useStateValue } from "../state";
-
-import { Patient } from "../types";
-
 import {
 	useParams
 } from 'react-router-dom';
 
+import {
+	Patient,
+} from "../types";
+
+import HospitalEntry from "./HospitalEntry";
+import OccupationalHealthcareEntry from "./OccupationalHealthcareEntry";
+import HealthCheckEntry from "./HealthCheckEntry";
 
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import TransgenderIcon from '@mui/icons-material/Transgender';
+
 
 
 const DisplayPatientInfo = () => {
@@ -55,23 +60,43 @@ const DisplayPatientInfo = () => {
 		}
 	};
 
-	const displayEntries = () : JSX.Element | null => {
+	const displayEntries = (): JSX.Element | null => {
 		if (patientsInfo[id].entries.length === 0) {
 			return null;
 		}
 
+		/**
+* Helper function for exhaustive type checking
+*/
+		const assertNever = (value: never): never => {
+			throw new Error(
+				`Unhandled discriminated union member: ${JSON.stringify(value)}`
+			);
+		};
+
+		const mapEntryDetails = patientsInfo[id].entries.map(entry => {
+			switch (entry.type) {
+				case 'Hospital':
+					return <HospitalEntry key={entry.id} entry={entry} />;
+				case 'OccupationalHealthcare':
+					return <OccupationalHealthcareEntry key={entry.id} entry={entry} />;
+				case 'HealthCheck':
+					return <HealthCheckEntry key={entry.id} entry={entry} />;
+				default:
+					assertNever(entry);
+					break;
+			}
+		});
+
 		return (
 			<div>
 				<h4>Entries:</h4>
-				<p>{patientsInfo[id].entries[0].date} - {patientsInfo[id].entries[0].description}</p>
-				<ul>
-					{patientsInfo[id].entries[0].diagnosisCodes?.
-						map((code: string) => <li key={code}>{code} - {diagonsisList[code].name}</li>)
-					}
-				</ul>
+				{mapEntryDetails}
 			</div>
 		);
 	};
+
+
 
 	return (
 		<div>
