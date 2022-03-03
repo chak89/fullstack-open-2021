@@ -7,7 +7,7 @@ import {
 	Gender
 } from './types';
 
-import patientData from '../data/patients.json';
+import patientData from '../data/patientsOLD.json';
 import fs = require('fs');
 
 //Generate ID

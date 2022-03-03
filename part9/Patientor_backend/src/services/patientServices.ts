@@ -1,4 +1,5 @@
 import { patientEntries } from '../utils';
+import patients from '../../data/patients';
 
 import {
 	NewPatientEntry,
@@ -24,18 +25,15 @@ const getNonSsnEntries = (): PatientNonSSN[] => {
 };
 
 const getPatientEntryById = (id: string): Patient | undefined => {
-	const foundEntry = patientEntries().find(entry => entry.id === id);
+	const foundEntry = patients.find(entry => entry.id == id);
+	console.log('foundEntry');
+	console.log(foundEntry);
 
 	if (!foundEntry) {
 		return undefined;
 	}
 
-	const formattedFoundEntry = {
-		...foundEntry,
-		entries: []
-	};
-
-	return formattedFoundEntry;
+	return foundEntry;
 };
 
 const addPatient = (entry: NewPatientEntry): PatientEntry => {
