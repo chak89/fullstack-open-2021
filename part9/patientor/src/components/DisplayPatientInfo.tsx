@@ -17,7 +17,7 @@ import TransgenderIcon from '@mui/icons-material/Transgender';
 
 const DisplayPatientInfo = () => {
 	const { id } = useParams<{ id?: string }>();
-	const [{ patientsInfo }, dispatch] = useStateValue();
+	const [{ patientsInfo, diagonsisList }, dispatch] = useStateValue();
 
 	if (!id) {
 		return null;
@@ -55,20 +55,32 @@ const DisplayPatientInfo = () => {
 		}
 	};
 
+	const displayEntries = () : JSX.Element | null => {
+		if (patientsInfo[id].entries.length === 0) {
+			return null;
+		}
+
+		return (
+			<div>
+				<h4>Entries:</h4>
+				<p>{patientsInfo[id].entries[0].date} - {patientsInfo[id].entries[0].description}</p>
+				<ul>
+					{patientsInfo[id].entries[0].diagnosisCodes?.
+						map((code: string) => <li key={code}>{code} - {diagonsisList[code].name}</li>)
+					}
+				</ul>
+			</div>
+		);
+	};
+
 	return (
 		<div>
 			{console.log('patientsInfo', patientsInfo)}
+			{console.log('diagonsisList', diagonsisList)}
 			<h3>{patientsInfo[id].name}{genderSymbol(patientsInfo[id].gender)}</h3>
-			<p>SSN: {patientsInfo[id].ssn}</p>
-			<p>Occupation: {patientsInfo[id].occupation}</p>
-			<h4>Entries:</h4>
-			<p>{patientsInfo[id].entries[0].date} {patientsInfo[id].entries[0].description}</p>
-			<ul>
-				{patientsInfo[id].entries[0].diagnosisCodes?.
-					map((code: string) => <li key={code}>{code}</li>)
-				}
-			</ul>
-
+			SSN: {patientsInfo[id].ssn}<br />
+			Occupation: {patientsInfo[id].occupation}
+			{displayEntries()}
 		</div>
 	);
 };

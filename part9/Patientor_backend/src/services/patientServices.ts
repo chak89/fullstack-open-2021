@@ -1,4 +1,4 @@
-import { patientEntries } from '../utils';
+//import { patientEntries } from '../utils';
 import patients from '../../data/patients';
 
 import {
@@ -11,11 +11,11 @@ import {
 import { generateId, writeToJsonFile } from '../utils';
 
 const getEntries = (): PatientEntry[] => {
-	return patientEntries();
+	return patients;
 };
 
 const getNonSsnEntries = (): PatientNonSSN[] => {
-	return patientEntries().map(({ id, name, dateOfBirth, gender, occupation }) => ({
+	return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
 		id,
 		name,
 		dateOfBirth,

@@ -76,5 +76,10 @@ export type Action =
 	| {
 		type: 'SET_PATIENT_INFO';
 		payload: Patient;
+	}
+	| {
+		type: 'SET_DIAGNOSIS_LIST';
+		payload: Diagnosis[];
 	};
+
 
