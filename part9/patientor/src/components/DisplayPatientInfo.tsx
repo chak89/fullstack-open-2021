@@ -61,6 +61,14 @@ const DisplayPatientInfo = () => {
 			<h3>{patientsInfo[id].name}{genderSymbol(patientsInfo[id].gender)}</h3>
 			<p>SSN: {patientsInfo[id].ssn}</p>
 			<p>Occupation: {patientsInfo[id].occupation}</p>
+			<h4>Entries:</h4>
+			<p>{patientsInfo[id].entries[0].date} {patientsInfo[id].entries[0].description}</p>
+			<ul>
+				{patientsInfo[id].entries[0].diagnosisCodes?.
+					map((code: string) => <li key={code}>{code}</li>)
+				}
+			</ul>
+
 		</div>
 	);
 };

@@ -25,12 +25,10 @@ export type PatientNonSSN = Omit<PatientEntry, 'ssn'>;
 export type NewPatientEntry = Omit<PatientEntry, 'id'>;
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export type Entry =
 	| HospitalEntry
 	| OccupationalHealthcareEntry
 	| HealthCheckEntry;
-
 
 export interface Patient {
 	id: string;

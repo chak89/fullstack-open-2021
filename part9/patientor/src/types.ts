@@ -10,9 +10,10 @@ export enum Gender {
 	Other = "other"
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Entry {
-}
+export type Entry =
+	| HospitalEntry
+	| OccupationalHealthcareEntry
+	| HealthCheckEntry;
 
 export interface Patient {
 	id: string;
@@ -23,6 +24,45 @@ export interface Patient {
 	dateOfBirth?: string;
 	entries: Entry[];
 }
+
+
+export interface HospitalEntry extends BaseEntry {
+	discharge: {
+		date: string;
+		criteria: string;
+	}
+}
+
+export interface OccupationalHealthcareEntry extends BaseEntry {
+	employerName: string;
+	sickLeave?: {
+		startDate: string;
+		endDate: string;
+	}
+}
+
+export interface HealthCheckEntry extends BaseEntry {
+	type: "HealthCheck";
+	healthCheckRating: HealthCheckRating;
+}
+
+export enum HealthCheckRating {
+	"Healthy" = 0,
+	"LowRisk" = 1,
+	"HighRisk" = 2,
+	"CriticalRisk" = 3
+}
+
+export interface BaseEntry {
+	id: string;
+	date: string;
+	type: string;
+	specialist: string;
+	diagnosisCodes?: Array<Diagnosis['code']>;
+	description: string;
+}
+
+
 
 export type Action =
 	| {
@@ -38,15 +78,3 @@ export type Action =
 		payload: Patient;
 	};
 
-/* export interface Action1 {
-	type: string;
-	payload: Patient;
-}
-
-export interface Action2 {
-	type: string;
-	payload: Patient[];
-}
-
-export type Action = | Action1 | Action2; 
- */
