@@ -5,7 +5,8 @@ import {
 	NewPatientEntry,
 	PatientNonSSN,
 	PatientEntry,
-	Patient
+	Patient,
+	EntryWithoutId
 } from '../types';
 
 import { generateId, writeToJsonFile } from '../utils';
@@ -52,9 +53,22 @@ const addPatient = (entry: NewPatientEntry): PatientEntry => {
 	return newPatientEntry;
 };
 
+const addPatientEntry = (patientEntry: Patient, entryBody: EntryWithoutId): Patient => {
+
+	const newEntryBody = {
+		id: generateId(),
+		...entryBody
+	};
+
+	patientEntry.entries.push(newEntryBody);
+
+	return patientEntry;
+};
+
 export default {
 	getEntries,
 	getNonSsnEntries,
 	addPatient,
-	getPatientEntryById
+	getPatientEntryById,
+	addPatientEntry
 };

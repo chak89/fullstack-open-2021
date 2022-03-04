@@ -25,10 +25,18 @@ export type PatientNonSSN = Omit<PatientEntry, 'ssn'>;
 export type NewPatientEntry = Omit<PatientEntry, 'id'>;
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
+// Define special omit for unions
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+// Define Entry without the 'id' property
+export type EntryWithoutId = UnionOmit<Entry, 'id'>;
+
 export type Entry =
 	| HospitalEntry
 	| OccupationalHealthcareEntry
 	| HealthCheckEntry;
+
+
 
 export interface Patient {
 	id: string;

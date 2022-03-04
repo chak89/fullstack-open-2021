@@ -96,8 +96,6 @@ const DisplayPatientInfo = () => {
 		);
 	};
 
-
-
 	return (
 		<div>
 			{console.log('patientsInfo', patientsInfo)}
