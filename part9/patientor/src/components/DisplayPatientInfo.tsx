@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
-import { setPatientInfo, useStateValue } from "../state";
+import { setPatientInfo, updatePatient, useStateValue } from "../state";
 import {
 	useParams
 } from 'react-router-dom';
@@ -10,27 +10,37 @@ import {
 	Patient,
 } from "../types";
 
-import HospitalEntry from "./HospitalEntry";
-import OccupationalHealthcareEntry from "./OccupationalHealthcareEntry";
-import HealthCheckEntry from "./HealthCheckEntry";
+import { PatientEntryFormValues } from "../AddPatientEntryModal/AddPatientEntryForm";
 
 import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import TransgenderIcon from '@mui/icons-material/Transgender';
-
+import AddPatientEntryModal from "../AddPatientEntryModal";
+import { Button } from "@material-ui/core";
+import PatientEntry from "./PatientEntry";
 
 
 const DisplayPatientInfo = () => {
 	const { id } = useParams<{ id?: string }>();
 	const [{ patientsInfo, diagonsisList }, dispatch] = useStateValue();
 
+	const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+	const [error, setError] = React.useState<string>();
+
+	const openModal = (): void => setModalOpen(true);
+
+	const closeModal = (): void => {
+		setModalOpen(false);
+		setError(undefined);
+	};
+
 	if (!id) {
 		return null;
 	}
 
-	if (!patientsInfo[id]) {
-		React.useEffect(() => {
-			console.log('DisplayPatientInfo -> UseEffect()');
+	React.useEffect(() => {
+		console.log('DisplayPatientInfo -> UseEffect()');
+		if (!patientsInfo[id]) {
 			const fetchPatientById = async () => {
 				try {
 					const { data: patientsInfoFromApi } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
@@ -40,8 +50,9 @@ const DisplayPatientInfo = () => {
 				}
 			};
 			void fetchPatientById();
-		});
-	}
+		}
+	});
+
 
 	if (Object.entries(patientsInfo).length === 0 || patientsInfo[id] === undefined) {
 		return null;
@@ -60,40 +71,24 @@ const DisplayPatientInfo = () => {
 		}
 	};
 
-	const displayEntries = (): JSX.Element | null => {
-		if (patientsInfo[id].entries.length === 0) {
-			return null;
-		}
-
-		/**
-* Helper function for exhaustive type checking
-*/
-		const assertNever = (value: never): never => {
-			throw new Error(
-				`Unhandled discriminated union member: ${JSON.stringify(value)}`
+	const submitNewPatientEntry = async (values: PatientEntryFormValues) => {
+		try {
+			const { data: newPatientEntry } = await axios.post<Patient>(
+				`${apiBaseUrl}/patients/${id}/entries`,
+				values
 			);
-		};
-
-		const mapEntryDetails = patientsInfo[id].entries.map(entry => {
-			switch (entry.type) {
-				case 'Hospital':
-					return <HospitalEntry key={entry.id} entry={entry} />;
-				case 'OccupationalHealthcare':
-					return <OccupationalHealthcareEntry key={entry.id} entry={entry} />;
-				case 'HealthCheck':
-					return <HealthCheckEntry key={entry.id} entry={entry} />;
-				default:
-					assertNever(entry);
-					break;
+			console.log('newPatientEntry:', newPatientEntry);
+			dispatch(updatePatient(newPatientEntry));
+			closeModal();
+		} catch (e: unknown) {
+			if (axios.isAxiosError(e)) {
+				console.error(e?.response?.data || "Unrecognized axios error");
+				setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+			} else {
+				console.error("Unknown error", e);
+				setError("Unknown error");
 			}
-		});
-
-		return (
-			<div>
-				<h4>Entries:</h4>
-				{mapEntryDetails}
-			</div>
-		);
+		}
 	};
 
 	return (
@@ -103,7 +98,16 @@ const DisplayPatientInfo = () => {
 			<h3>{patientsInfo[id].name}{genderSymbol(patientsInfo[id].gender)}</h3>
 			SSN: {patientsInfo[id].ssn}<br />
 			Occupation: {patientsInfo[id].occupation}
-			{displayEntries()}
+			<PatientEntry id={id} />
+			<AddPatientEntryModal
+				modalOpen={modalOpen}
+				onSubmit={submitNewPatientEntry}
+				error={error}
+				onClose={closeModal}
+			/>
+			<Button variant="contained" onClick={() => openModal()}>
+				Add New Entry
+			</Button>
 		</div>
 	);
 };

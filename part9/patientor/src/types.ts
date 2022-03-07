@@ -81,6 +81,10 @@ export type Action =
 	| {
 		type: 'SET_DIAGNOSIS_LIST';
 		payload: Diagnosis[];
+	}
+	| {
+		type: 'UPDATE_PATIENT';
+		payload: Patient;
 	};
 
 
