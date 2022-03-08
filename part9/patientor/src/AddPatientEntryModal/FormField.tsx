@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
 import {
 	Select,
@@ -10,6 +10,7 @@ import {
 import { Diagnosis, HealthCheckRating } from "../types";
 import { InputLabel } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
+
 
 export type HealthRatingOption = {
 	value: HealthCheckRating;
@@ -48,6 +49,7 @@ interface TextProps extends FieldProps {
 	label: string;
 	placeholder: string;
 	readonly: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	variant: any;
 }
 
@@ -117,11 +119,19 @@ export const DiagnosisSelection = ({
 }) => {
 	const [selectedDiagnoses, setDiagnoses] = useState<string[]>([]);
 	const field = "diagnosisCodes";
+
 	const onChange = (data: string[]) => {
 		setDiagnoses([...data]);
 		setFieldTouched(field, true);
-		setFieldValue(field, selectedDiagnoses);
+		//setFieldValue(field, selectedDiagnoses);
 	};
+
+/* 	Set formik fiedlValue after the state has changed, otherwise Formik will not register current selection */
+	useEffect(() => {
+		setFieldValue(field, selectedDiagnoses);
+	}, [selectedDiagnoses]);
+
+
 
 	const stateOptions = diagnoses.map((diagnosis) => ({
 		key: diagnosis.code,

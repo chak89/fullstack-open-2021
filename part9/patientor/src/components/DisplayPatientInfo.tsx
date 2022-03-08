@@ -24,13 +24,13 @@ const DisplayPatientInfo = () => {
 	const { id } = useParams<{ id?: string }>();
 	const [{ patientsInfo, diagonsisList }, dispatch] = useStateValue();
 
-	const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+	const [modalOpen1, setModalOpen1] = React.useState<boolean>(false);
 	const [error, setError] = React.useState<string>();
 
-	const openModal = (): void => setModalOpen(true);
+	const openModal1 = (): void => setModalOpen1(true);
 
-	const closeModal = (): void => {
-		setModalOpen(false);
+	const closeModal1 = (): void => {
+		setModalOpen1(false);
 		setError(undefined);
 	};
 
@@ -79,7 +79,7 @@ const DisplayPatientInfo = () => {
 			);
 			console.log('newPatientEntry:', newPatientEntry);
 			dispatch(updatePatient(newPatientEntry));
-			closeModal();
+			closeModal1();
 		} catch (e: unknown) {
 			if (axios.isAxiosError(e)) {
 				console.error(e?.response?.data || "Unrecognized axios error");
@@ -100,12 +100,12 @@ const DisplayPatientInfo = () => {
 			Occupation: {patientsInfo[id].occupation}
 			<PatientEntry id={id} />
 			<AddPatientEntryModal
-				modalOpen={modalOpen}
+				modalOpen1={modalOpen1}
 				onSubmit={submitNewPatientEntry}
 				error={error}
-				onClose={closeModal}
+				onClose={closeModal1}
 			/>
-			<Button variant="contained" onClick={() => openModal()}>
+			<Button variant="contained" onClick={() => openModal1()}>
 				Add New Entry
 			</Button>
 		</div>
