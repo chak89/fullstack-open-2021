@@ -33,3 +33,8 @@ This course serves as an introduction to modern web application development with
 [Part11]: <https://fullstackopen.com/en/part11>
 [Part12]: <https://fullstackopen.com/en/part12>
 [Part13]: <https://fullstackopen.com/en/part13>
+
+## Certificate of Completion:  
+[Full Stack Open 2021](https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/f340f1ae3169e21f0d20b9dea0ec5cba)  
+[Full Stack GraphQL](https://studies.cs.helsinki.fi/stats/api/certificate/fs-graphql/en/15d150088665d7f1fe3a96ec34ab5e39)  
+[Full Stack Open TypeScript](https://studies.cs.helsinki.fi/stats/api/certificate/fs-typescript/en/724eee40ec84afa78525bb47f3a25f72)  
